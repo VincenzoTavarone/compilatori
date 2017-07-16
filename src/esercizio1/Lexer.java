@@ -27,6 +27,7 @@ public class Lexer {
 		tabella_simboli.put("if", new Token("IF"));
 		tabella_simboli.put("then", new Token("THEN"));
 		tabella_simboli.put("else", new Token("ELSE"));
+		tabella_simboli.put(new String(""+"else".hashCode()), "ELSE");
 		char[] buffer = new char[1024]; //buffer di destinazione
 		File file = new File(path);
 		Pattern digit = Pattern.compile("[0-9]");
@@ -128,7 +129,15 @@ public class Lexer {
 					Matcher digit_matcher = digit.matcher(""+buffer[i]);
 					if(matcher.matches() || digit_matcher.matches()){
 						if(buffer[i+1]=='\u001a'){ //EOF
-							token = new Token(ID, String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin+1));
+							String value = String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin); //il codice è uguale, bisogna vedere se si può fare una funzione esterna
+							String key = ""+value.hashCode();
+							if(tabella_simboli.get(value) instanceof Token){
+								Token cast = (Token)tabella_simboli.get(value);
+								token = new Token(cast.getName());
+							}else{
+								tabella_simboli.put(key, value);
+								token = new Token(ID, key);
+							}
 							tokens[index] = token;
 							index++;
 							lexemeBegin = i;
@@ -136,7 +145,15 @@ public class Lexer {
 						}
 						break;
 					}else{
-						token = new Token(ID, String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin));
+						String value = String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin);
+						String key = ""+value.hashCode();
+						if(tabella_simboli.get(value) instanceof Token){
+							Token cast = (Token)tabella_simboli.get(value);
+							token = new Token(cast.getName());
+						}else{
+							tabella_simboli.put(key, value);
+							token = new Token(ID, key);
+						}
 						tokens[index] = token;
 						index++;
 						lexemeBegin = i;

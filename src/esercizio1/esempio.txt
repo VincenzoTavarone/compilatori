@@ -1,1 +1,1 @@
-if x = y then x = jo else y = jey
+if x = y then x = jo else y = jo 
