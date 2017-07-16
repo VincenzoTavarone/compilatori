@@ -129,7 +129,7 @@ public class Lexer {
 					Matcher digit_matcher = digit.matcher(""+buffer[i]);
 					if(matcher.matches() || digit_matcher.matches()){
 						if(buffer[i+1]=='\u001a'){ //EOF
-							String value = String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin); //il codice è uguale, bisogna vedere se si può fare una funzione esterna
+							String value = String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin+1); //il codice è uguale, bisogna vedere se si può fare una funzione esterna
 							String key = ""+value.hashCode();
 							if(tabella_simboli.get(value) instanceof Token){
 								Token cast = (Token)tabella_simboli.get(value);
