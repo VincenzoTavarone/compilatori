@@ -15,6 +15,8 @@ public class Lexer {
 	private static final String MalformedErrorString = "C'è un errore nella posizione :";
 	private static final String RELOP = "RELOP";
 	private static final String ID = "ID";
+	private static final String NUMBER = "NUMBER";
+	private static final char EOF = '\u001a';
 	
 	public static Token[] lexer(String path){
 		
@@ -37,7 +39,7 @@ public class Lexer {
 			FileReader file_reader = new FileReader(file);
 			BufferedReader buffered_reader = new BufferedReader(file_reader);
 			int size = buffered_reader.read(buffer);
-			buffer[size] = '\u001a';//EOF
+			buffer[size] = EOF; 
 			int state = 0;
 			int lexemeBegin = 0;
 			for(int i = 0; i < size; i++){
@@ -128,7 +130,7 @@ public class Lexer {
 					matcher = letter.matcher(""+buffer[i]);
 					Matcher digit_matcher = digit.matcher(""+buffer[i]);
 					if(matcher.matches() || digit_matcher.matches()){
-						if(buffer[i+1]=='\u001a'){ //EOF
+						if(buffer[i+1]==EOF){ 
 							String value = String.copyValueOf(buffer,lexemeBegin, i-lexemeBegin+1); //il codice è uguale, bisogna vedere se si può fare una funzione esterna
 							String key = ""+value.hashCode();
 							if(tabella_simboli.get(value) instanceof Token){
@@ -175,9 +177,29 @@ public class Lexer {
 						state = 20;
 						if(buffer[i]!=' ' && buffer[i]!='\n' && buffer[i]!='\t')
 							i--;
-						break;
 					}
-					
+					break;
+				
+				case 7:
+					matcher = digit.matcher(""+buffer[i]);
+					if(matcher.matches()){
+						if(buffer[i+1]==EOF){
+							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
+							tokens[index] = token;
+							index++;
+							lexemeBegin = i;
+							state = 0;
+						}
+						break;
+					}else{
+						token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin));
+						tokens[index] = token;
+						index++;
+						lexemeBegin = i;
+						state = 0;
+					}
+					break;
+				
 				/*
 				 * Gestione spazi, tab
 				 */
