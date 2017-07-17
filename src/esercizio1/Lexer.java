@@ -166,8 +166,12 @@ public class Lexer {
 				 */
 				
 				case 6:
-					i--;
-					state = 0;
+					if(buffer[i]==' ' || buffer[i]=='\n' || buffer[i]=='\t')
+						break;
+					else{
+						i--;
+						state = 0;
+					}
 					break;
 				}
 			}//fine del ciclo			

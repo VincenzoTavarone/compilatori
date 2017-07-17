@@ -2,7 +2,5 @@
 <classpath>
 	<classpathentry excluding="**/*.cup|**/*.lex" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="java-cup-11a.jar"/>
-	<classpathentry exported="true" kind="lib" path="jflex-1.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
