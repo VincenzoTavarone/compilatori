@@ -160,12 +160,29 @@ public class Lexer {
 						state = 0;
 					}
 					break;
-				
+					
 				/*
 				 * Gestione numeri
 				 */
-				
+									
 				case 6:
+					matcher = digit.matcher(""+buffer[i]);
+					if(matcher.matches()){
+						state = 7;
+						lexemeBegin = i;
+						i--;
+					}else{
+						state = 20;
+						if(buffer[i]!=' ' && buffer[i]!='\n' && buffer[i]!='\t')
+							i--;
+						break;
+					}
+					
+				/*
+				 * Gestione spazi, tab
+				 */
+
+				case 20:
 					if(buffer[i]==' ' || buffer[i]=='\n' || buffer[i]=='\t')
 						break;
 					else{
@@ -173,6 +190,7 @@ public class Lexer {
 						state = 0;
 					}
 					break;
+										
 				}
 			}//fine del ciclo			
 			buffered_reader.close();
