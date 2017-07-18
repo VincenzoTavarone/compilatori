@@ -191,6 +191,10 @@ public class Lexer {
 							state = 0;
 						}
 						break;
+					}else if(buffer[i]=='.'){
+						state = 8;
+					}else if(buffer[i]=='E'){
+						state = 9;
 					}else{
 						token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin));
 						tokens[index] = token;
@@ -200,6 +204,80 @@ public class Lexer {
 					}
 					break;
 				
+				case 8:
+					matcher = digit.matcher(""+buffer[i]);
+					if(buffer[i]=='.')
+						throw new MalformedTokenException(MalformedErrorString+i);
+					else if(matcher.matches()){
+						if(buffer[i+1]==EOF){
+							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
+							tokens[index] = token;
+							index++;
+							lexemeBegin = i;
+							state = 0;
+						}
+						break;
+					}else if(buffer[i]=='E'){
+						state = 9;
+					}else{
+						token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin));
+						tokens[index] = token;
+						index++;
+						lexemeBegin = i;
+						state = 0;
+					}
+					break;
+					
+				case 9 :
+					matcher = digit.matcher(""+buffer[i]);
+					if(buffer[i]=='+' || buffer[i]=='-'){
+						state = 10;
+					}else if(matcher.matches()){
+						state = 11;
+					}else{
+						throw new MalformedTokenException(MalformedErrorString+i);
+					}
+					break;
+				
+				case 10 : 
+					matcher = digit.matcher(""+buffer[i]);
+					if(buffer[i]=='+' || buffer[i]=='-'){
+						throw new MalformedTokenException(MalformedErrorString+i);
+					}else if(matcher.matches()){
+						if(buffer[i]==EOF){
+							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
+							tokens[index] = token;
+							index++;
+							lexemeBegin = i;
+							state = 0;
+						}
+					}else{
+						token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin));
+						tokens[index] = token;
+						index++;
+						lexemeBegin = i;
+						state = 0;
+					}
+					break;
+					
+				case 11 : 
+					matcher = digit.matcher(""+buffer[i]);
+					if(matcher.matches()){
+						if(buffer[i]==EOF){
+							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
+							tokens[index] = token;
+							index++;
+							lexemeBegin = i;
+							state = 0;
+						}
+					}else{
+						token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin));
+						tokens[index] = token;
+						index++;
+						lexemeBegin = i;
+						state = 0;
+					}
+					break;
 				/*
 				 * Gestione spazi, tab
 				 */
