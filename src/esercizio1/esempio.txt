@@ -1,1 +1,1 @@
-if x = y then x = jo else y = 60E+12223
+if x <> y then x = 6.11E-2 else y = 60E+12223
