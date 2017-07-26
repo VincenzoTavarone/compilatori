@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class Lexer {
 	
-	private static final String MalformedErrorString = "C'è un errore nella posizione :";
+	private static final String MalformedStringException = "C'è un errore nella posizione :";
 	private static final String RELOP = "RELOP";
 	private static final String ID = "ID";
 	private static final String NUMBER = "NUMBER";
@@ -45,11 +45,12 @@ public class Lexer {
 			for(int i = 0; i < size; i++){
 				Matcher matcher = null;
 				Token token = null;
+				boolean white_space = (buffer[i]==' ' || buffer[i]=='\n' || buffer[i]=='\t');
 				switch(state){
 				case 0:
 					if(buffer[i]!='<' && buffer[i]!='>' && buffer[i]!='='){
 						state = 4;
-						if(buffer[i]!=' ' && buffer[i]!='\n' && buffer[i]!='\t'){
+						if(!white_space){
 							i--;
 						}
 						break;
@@ -67,9 +68,11 @@ public class Lexer {
 					}else{
 						matcher = relop.matcher(""+buffer[i]);
 						if(matcher.matches())
-							throw new MalformedTokenException(MalformedErrorString+i);
+							throw new MalformedTokenException(MalformedStringException+i);
 						else{
 							token = new Token(RELOP, "LT");
+							if(!white_space)
+								i--;
 						}
 					}
 					tokens[index] = token;
@@ -81,13 +84,15 @@ public class Lexer {
 				case 2:
 					matcher = relop.matcher(""+buffer[i]);
 					if(matcher.matches())
-						throw new MalformedTokenException(MalformedErrorString+i);
+						throw new MalformedTokenException(MalformedStringException+i);
 					else{
 						token = new Token(RELOP, "EQ");
 						tokens[index] = token;
 						index++;
 						lexemeBegin = i;
 						state = 0;
+						if(!white_space)
+							i--;
 					}
 					break;
 					
@@ -97,9 +102,11 @@ public class Lexer {
 					}else{
 						matcher = relop.matcher(""+buffer[i]);
 						if(matcher.matches())
-							throw new MalformedTokenException(MalformedErrorString+i);
+							throw new MalformedTokenException(MalformedStringException+i);
 						else{
 							token = new Token(RELOP, "GT");
+							if(!white_space)
+								i--;
 						}
 					}
 					tokens[index] = token;
@@ -120,7 +127,7 @@ public class Lexer {
 						i--;
 					}else{
 						state = 6;
-						if(buffer[i]!=' ' && buffer[i]!='\n' && buffer[i]!='\t'){
+						if(!white_space){
 							i--;
 						}
 					}
@@ -175,7 +182,7 @@ public class Lexer {
 						i--;
 					}else{
 						state = 20;
-						if(buffer[i]!=' ' && buffer[i]!='\n' && buffer[i]!='\t')
+						if(!white_space)
 							i--;
 					}
 					break;
@@ -207,7 +214,7 @@ public class Lexer {
 				case 8:
 					matcher = digit.matcher(""+buffer[i]);
 					if(buffer[i]=='.')
-						throw new MalformedTokenException(MalformedErrorString+i);
+						throw new MalformedTokenException(MalformedStringException+i);
 					else if(matcher.matches()){
 						if(buffer[i+1]==EOF){
 							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
@@ -235,16 +242,16 @@ public class Lexer {
 					}else if(matcher.matches()){
 						state = 11;
 					}else{
-						throw new MalformedTokenException(MalformedErrorString+i);
+						throw new MalformedTokenException(MalformedStringException+i);
 					}
 					break;
 				
 				case 10 : 
 					matcher = digit.matcher(""+buffer[i]);
 					if(buffer[i]=='+' || buffer[i]=='-'){
-						throw new MalformedTokenException(MalformedErrorString+i);
+						throw new MalformedTokenException(MalformedStringException+i);
 					}else if(matcher.matches()){
-						if(buffer[i]==EOF){
+						if(buffer[i+1]==EOF){
 							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
 							tokens[index] = token;
 							index++;
@@ -263,7 +270,7 @@ public class Lexer {
 				case 11 : 
 					matcher = digit.matcher(""+buffer[i]);
 					if(matcher.matches()){
-						if(buffer[i]==EOF){
+						if(buffer[i+1]==EOF){
 							token = new Token(NUMBER, String.copyValueOf(buffer, lexemeBegin, i-lexemeBegin+1));
 							tokens[index] = token;
 							index++;
@@ -283,7 +290,7 @@ public class Lexer {
 				 */
 
 				case 20:
-					if(buffer[i]==' ' || buffer[i]=='\n' || buffer[i]=='\t')
+					if(white_space)
 						break;
 					else{
 						i--;
