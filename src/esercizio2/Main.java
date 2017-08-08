@@ -3,7 +3,6 @@ package esercizio2;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 public class Main {
 
@@ -19,18 +18,15 @@ public class Main {
 		
 		Lexer lexer = new Lexer(input);
 		
-		Yytoken token = null;
+		Yytoken[] tokens = lexer.getLexTable();
 		
-		try {
-			while((token = lexer.yylex()) != null){
-				System.out.println(token.toString());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		int i = 0;
+		
+		while(tokens[i]!=null){
+			System.out.println(tokens[i]);
+			i++;
 		}
-		
-		
-		
+				
 	}
 	
 }
