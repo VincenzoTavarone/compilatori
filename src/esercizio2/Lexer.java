@@ -638,13 +638,23 @@ class Lexer {
 	 * @return table of token
 	 */
 	public Yytoken[] getLexTable(){
-		Yytoken[] tokens = new Yytoken[124];
+		int size = 2;
+		Yytoken[] tokens = new Yytoken[size];
 		Yytoken token = null;
 		try {
 			int i = 0;
 			while((token = yylex())!= null){
 				tokens[i] = token;
 				i++;
+				if(i == tokens.length - 1){
+					Yytoken[] backup = tokens;
+					tokens = new Yytoken[size*2];
+					for(int j = 0; j < size; j++){
+						tokens[j] = backup[j];
+					}
+					size*=2;
+					backup = null;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
