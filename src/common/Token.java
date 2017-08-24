@@ -1,4 +1,4 @@
-package esercizio1;
+package common;
 
 public class Token {
 	
