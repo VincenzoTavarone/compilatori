@@ -19,6 +19,8 @@ public class Lexer {
 	private static final String RELOP = "RELOP";
 	private static final String ID = "ID";
 	private static final String NUMBER = "NUMBER";
+	private static final String SEMI = "SEMI";
+	private static final String ASSIGN = "ASSIGN";
 	private static final char EOF = '\u001a';
 	
 	public static Token[] lexer(String path){
@@ -169,6 +171,8 @@ public class Lexer {
 						index++;
 						lexemeBegin = i;
 						state = 0;
+						if(!white_space)
+							i--;
 					}
 					break;
 					
@@ -183,9 +187,10 @@ public class Lexer {
 						lexemeBegin = i;
 						i--;
 					}else{
-						state = 20;
-						if(!white_space)
+						state = 12;
+						if(!white_space){
 							i--;
+						}
 					}
 					break;
 				
@@ -210,6 +215,8 @@ public class Lexer {
 						index++;
 						lexemeBegin = i;
 						state = 0;
+						if(!white_space)
+							i--;
 					}
 					break;
 				
@@ -234,6 +241,8 @@ public class Lexer {
 						index++;
 						lexemeBegin = i;
 						state = 0;
+						if(!white_space)
+							i--;
 					}
 					break;
 					
@@ -266,6 +275,8 @@ public class Lexer {
 						index++;
 						lexemeBegin = i;
 						state = 0;
+						if(!white_space)
+							i--;
 					}
 					break;
 					
@@ -285,8 +296,53 @@ public class Lexer {
 						index++;
 						lexemeBegin = i;
 						state = 0;
+						if(!white_space)
+							i--;
 					}
 					break;
+				
+				/*
+				 * Gestione token SEMI
+				 */
+					
+				case 12:
+					if(buffer[i]==';'){
+						token = new Token(SEMI);
+						tokens[index] = token;
+						index++;
+						state=0;
+					}else{
+						state = 13;
+						if(!white_space)
+							i--;
+					}
+					break;
+					
+				/*
+				 * Gestione token ASSIGN
+				 */
+				
+				case 13:
+					if(buffer[i]=='-')
+						state = 14;
+					else{
+						state = 20;
+						if(!white_space)
+							i--;
+					}
+					break;
+				
+				case 14:
+					if(buffer[i]=='>'){
+						token = new Token(ASSIGN);
+						tokens[index] = token;
+						index++;
+						state = 0;
+					}else{
+						throw new MalformedTokenException(MalformedStringException+i);
+					}
+					break;
+					
 				/*
 				 * Gestione spazi, tab
 				 */

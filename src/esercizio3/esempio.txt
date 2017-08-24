@@ -1,0 +1,1 @@
+if x <> y then x = 6; else y = 60E+12223; x -> y;
