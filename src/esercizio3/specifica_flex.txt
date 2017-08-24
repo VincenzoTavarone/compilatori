@@ -1,0 +1,12 @@
+N = {Program, Stat, Id_num, Relaz}
+T = {IF,THEN,ELSE,ID,NUM,LE,NE,LT,GE,GT,SEMI}
+S = Program
+P = {
+	Program -> Stat Program_1
+	Program_1 -> SEMI Stat Program_1 | epsilon
+	Stat -> IF Condition THEN Stat Stat' | ID ASSIGN Id_num
+	Stat' -> ELSE Stat | epsilon
+	Condition -> Id_num Relaz Id_num
+	Id_num -> ID | NUM
+	Relaz -> LE | NE | LT | GE | GT
+}
