@@ -18,7 +18,7 @@ public class Lexer {
 	private static final String MalformedStringException = "C'è un errore nella posizione :";
 	private static final String RELOP = "RELOP";
 	private static final String ID = "ID";
-	private static final String NUMBER = "NUMBER";
+	private static final String NUMBER = "NUM";
 	private static final String SEMI = "SEMI";
 	private static final String ASSIGN = "ASSIGN";
 	private static final char EOF = '\u001a';

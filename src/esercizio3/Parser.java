@@ -24,24 +24,49 @@ public class Parser {
 		this.tokens = tokens;
 	}
 	
-	public boolean parser(){
+	public boolean parse(){
 		/*
 		 * Servono almeno 3 token per formare 1 statement e almeno uno statement per formare un programma
 		 */
 		if(tokens[2]==null)
 			return false;
-		return true;
-	}
-
-	private boolean program(){
-		return true;
-	}
-	
-	private boolean stat(){
+		
+		while(tokens[pointer]!=null){
+			if(!program())
+				return false;
+		}
 		return true;
 	}
 	
-	private boolean condition(){
+	public boolean program(){
+		return true;
+	}
+	
+	public boolean program1(){
+		return true;
+	}
+	
+	public boolean stat(){
+		return true;
+	}
+	
+	public boolean matched_stat(){
+		return true;
+	}
+	
+	public boolean open_stat(){
+		return true;
+	}
+	
+	public boolean open_stat_1(){
+		return true;
+	}
+	
+	public boolean id_num(){
+		return true;
+	}
+	
+	public boolean relaz(){
 		return true;
 	}
 	
