@@ -38,6 +38,9 @@ public class Parser {
 		return true;
 	}
 	
+	/*
+	 * I metodi vanno passati tutti a private
+	 */
 	public boolean program(){
 		return true;
 	}
