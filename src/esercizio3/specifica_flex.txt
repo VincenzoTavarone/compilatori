@@ -4,9 +4,9 @@ S = Program
 P = {
 	Program -> Stat Program_1
 	Program_1 -> SEMI Stat Program_1 | epsilon
-	Stat -> IF Condition THEN Stat Stat' | ID ASSIGN Id_num
-	Stat' -> ELSE Stat | epsilon
-	Condition -> Id_num Relaz Id_num
+	matched_stat -> IF Id_num Relaz Id_num THEN matched_stat ELSE matched_stat | ID ASSING ID_num
+    open_stat -> IF Id_num Relaz Id_num THEN open_stat1
+    opens_stat1 -> stat | matched_stat ELSE open_stat
 	Id_num -> ID | NUM
 	Relaz -> LE | NE | LT | GE | GT
 }

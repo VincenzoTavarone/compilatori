@@ -90,7 +90,7 @@ public class Lexer {
 					if(matcher.matches())
 						throw new MalformedTokenException(MalformedStringException+i);
 					else{
-						token = new Token(RELOP, "EQ");
+						token = new Token(ASSIGN);
 						tokens[index] = token;
 						index++;
 						lexemeBegin = i;
@@ -312,34 +312,9 @@ public class Lexer {
 						index++;
 						state=0;
 					}else{
-						state = 13;
-						if(!white_space)
-							i--;
-					}
-					break;
-					
-				/*
-				 * Gestione token ASSIGN
-				 */
-				
-				case 13:
-					if(buffer[i]=='-')
-						state = 14;
-					else{
 						state = 20;
 						if(!white_space)
 							i--;
-					}
-					break;
-				
-				case 14:
-					if(buffer[i]=='>'){
-						token = new Token(ASSIGN);
-						tokens[index] = token;
-						index++;
-						state = 0;
-					}else{
-						throw new MalformedTokenException(MalformedStringException+i);
 					}
 					break;
 					
