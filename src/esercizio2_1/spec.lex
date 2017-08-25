@@ -48,6 +48,9 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 <YYINITIAL> "abstract"           { return symbol(sym.ABSTRACT); }
 <YYINITIAL> "boolean"            { return symbol(sym.BOOLEAN); }
 <YYINITIAL> "break"              { return symbol(sym.BREAK); }
+<YYINITIAL> "if" { return symbol(sym.IF); }
+<YYINITIAL> "then" { return symbol(sym.THEN); }
+<YYINITIAL> "else" { return symbol(sym.ELSE); }
 
 <YYINITIAL> {
 /* identifiers */ 
@@ -61,6 +64,11 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 "="                            { return symbol(sym.EQ); }
 "=="                           { return symbol(sym.EQEQ); }
 "+"                            { return symbol(sym.PLUS); }
+"<" 							{ return symbol(sym.REOP,"LT"); }
+">" 							{ return symbol(sym.REOP,"GT"); }
+"<=" 							{ return symbol(sym.REOP,"LE"); }
+">=" 							{ return symbol(sym.REOP,"GE"); }
+"<>"							{ return symbol(sym.REOP,"NE"); }
 
 /* comments */
 {Comment}                      { /* ignore */ }

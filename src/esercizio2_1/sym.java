@@ -11,6 +11,10 @@ public interface sym {
 	public static final int BREAK = 7;
 	public static final int BOOLEAN = 8;
 	public static final int ABSTRACT = 9;
-	public static final int EOF = 10;
+	public static final int REOP = 10;
+	public static final int THEN = 11;
+	public static final int ELSE = 12;
+	public static final int IF = 13;
+	public static final int EOF = 14;
 
 }
