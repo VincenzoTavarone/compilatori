@@ -6,7 +6,7 @@ P = {
 	Program_1 -> SEMI Stat Program_1 | epsilon
 	matched_stat -> IF Id_num Relaz Id_num THEN matched_stat ELSE matched_stat | ID ASSING ID_num
     open_stat -> IF Id_num Relaz Id_num THEN open_stat1
-    opens_stat1 -> stat | matched_stat ELSE open_stat
+    opens_stat1 -> Stat | matched_stat ELSE open_stat
 	Id_num -> ID | NUM
 	Relaz -> LE | NE | LT | GE | GT
 }

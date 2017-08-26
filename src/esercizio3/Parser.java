@@ -11,7 +11,7 @@ public class Parser {
 	    Stat -> matched_stat | open_stat
 	    matched_stat -> IF Id_num Relaz Id_num THEN matched_stat ELSE matched_stat | ID ASSING ID_num
 	    open_stat -> IF Id_num Relaz Id_num THEN open_stat1
-	    opens_stat1 -> stat | matched_stat ELSE open_stat
+	    opens_stat1 -> Stat | matched_stat ELSE open_stat
 	    Id_num -> ID | NUM
 	    Relaz -> LE | NE | LT | GE | GT
 	 */
@@ -42,10 +42,24 @@ public class Parser {
 	 * I metodi vanno passati tutti a private
 	 */
 	public boolean program(){
+		
+		if(!stat())
+			return false;
+		
+		pointer++;
+		
+		if(!program1())
+			return false;
+		
 		return true;
 	}
 	
 	public boolean program1(){
+		
+		if(!tokens[pointer].getName().equals("SEMI") && tokens[pointer+1]!=null)
+			return false;
+		
+		pointer++;
 		return true;
 	}
 	
@@ -66,10 +80,14 @@ public class Parser {
 	}
 	
 	public boolean id_num(){
+		if(!tokens[pointer].getName().equals("ID") || !tokens[pointer].getName().equals("NUM"))
+			return false;
 		return true;
 	}
 	
 	public boolean relaz(){
+		if(!tokens[pointer].getName().equals("RELOP"))
+			return false;
 		return true;
 	}
 	
