@@ -18,14 +18,23 @@ public class Parser {
 	
 	private int pointer;
 	private Token[] tokens;
+	private boolean eof;
 	
 	public Parser(Token[] tokens){
 		pointer = 0;
+		eof = false;
 		this.tokens = tokens;
 	}
 	
 	private boolean isFinished(){
-		return tokens[pointer]==null;
+		return eof;
+	}
+	
+	private void increment(){
+		if(tokens[pointer+1]!=null)
+			pointer++;
+		else
+			eof = true;
 	}
 	
 	public boolean parse(){
@@ -50,7 +59,7 @@ public class Parser {
 		if(!stat())
 			return false;
 		
-		pointer++;
+		increment();
 		
 		if(!program1())
 			return false;
@@ -60,14 +69,16 @@ public class Parser {
 	
 	public boolean program1(){
 		
+		System.out.println("in program 1");
+				
 		if(!tokens[pointer].getName().equals("SEMI"))
 			return isFinished();
 		
-		pointer++;
+		increment();
 		if(!stat())
 			return false;
 		
-		pointer++;
+		increment();
 		if(!program1())
 			return false;
 		
@@ -75,6 +86,8 @@ public class Parser {
 	}
 	
 	public boolean stat(){
+		
+		System.out.println("in stat");
 		
 		int backtrack = pointer;
 		
@@ -88,45 +101,48 @@ public class Parser {
 	
 	public boolean matched_stat(){
 		
+		System.out.println("in matched stat");
+				
 		if(tokens[pointer].getName().equals("IF")){
 			
-			pointer++;
+			increment();
 			if(!id_num())
 				return false;
 			
-			pointer++;
+			increment();
 			if(!relaz())
 				return false;
 			
-			pointer++;
+			increment();
 			if(!id_num())
 				return false;
 			
-			pointer++;
+			increment();
 			if(!tokens[pointer].getName().equals("THEN"))
 				return false;
 			
-			pointer++;
+			increment();
 			if(!matched_stat())
 				return false;
 			
-			pointer++;
+			increment();
 			if(!tokens[pointer].getName().equals("ELSE"))
 				return false;
 			
-			pointer++;
+			increment();
 			if(!matched_stat())
 				return false;
 				
 		}else{
+			System.out.println("in else matched stat");
 			if(!tokens[pointer].getName().equals("ID"))
 				return false;
 			
-			pointer++;
+			increment();
 			if(!tokens[pointer].getName().equals("ASSIGN"))
 				return false;
 			
-			pointer++;
+			increment();
 			if(!id_num())
 				return false;
 		}
@@ -135,34 +151,37 @@ public class Parser {
 	}
 	
 	public boolean open_stat(){
-		
+				
 		if(!tokens[pointer].getName().equals("IF"))
 			return false;
 		
-		pointer++;
+		increment();
 		if(!id_num())
 			return false;
 		
-		pointer++;
+		increment();
 		if(!relaz())
 			return false;
 		
-		pointer++;
+		increment();
 		if(!id_num())
 			return false;
 		
-		pointer++;
+		increment();
 		if(!tokens[pointer].getName().equals("THEN"))
 			return false;
 		
-		pointer++;
-		if(!open_stat())
+		increment();
+		if(!open_stat_1())
 			return false;
 		
 		return true;
 	}
 	
 	public boolean open_stat_1(){
+		
+		System.out.println("in open stat 1");
+		System.out.println(tokens[pointer]);
 		
 		int backtrack = pointer;
 		
@@ -171,11 +190,11 @@ public class Parser {
 			if(!matched_stat())
 				return false;
 			
-			pointer++;
+			increment();
 			if(!tokens[pointer].getName().equals("ELSE"))
 				return false;
 			
-			pointer++;
+			increment();
 			if(!open_stat())
 				return false;
 		}
@@ -184,7 +203,7 @@ public class Parser {
 	}
 	
 	public boolean id_num(){
-		if(!tokens[pointer].getName().equals("ID") || !tokens[pointer].getName().equals("NUM"))
+		if(!tokens[pointer].getName().equals("ID") && !tokens[pointer].getName().equals("NUM"))
 			return false;
 		return true;
 	}

@@ -13,6 +13,9 @@ public class Tester {
 			System.out.println(tokens[i]);
 			i++;
 		}
+		System.out.println("\nparser\n");
+		Parser parser = new Parser(tokens);
+		System.out.println(parser.parse());
 	}
 
 }
