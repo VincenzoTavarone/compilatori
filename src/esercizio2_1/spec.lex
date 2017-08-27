@@ -14,6 +14,7 @@ import java_cup.runtime.*;
 
 %{
 StringBuffer string = new StringBuffer();
+TableOfSymbols table = new TableOfSymbols();
 
 private Symbol symbol(int type) {
 return new Symbol(type, yyline, yycolumn);
@@ -54,10 +55,14 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 
 <YYINITIAL> {
 /* identifiers */ 
-{Identifier}                   { return symbol(sym.IDENTIFIER); }
+{Identifier}                   {
+								 table.add(symbol(sym.IDENTIFIER, yytext()));
+								return symbol(sym.IDENTIFIER); 
+								}
 
 /* literals */
-{DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL); }
+{DecIntegerLiteral}            { table.add(symbol(sym.INTEGER_LITERAL, yytext())); 
+									return symbol(sym.INTEGER_LITERAL); }
 \"                             { string.setLength(0); yybegin(STRING); }
 
 /* operators */
@@ -79,6 +84,7 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 
 <STRING> {
 \"                             { yybegin(YYINITIAL); 
+								table.add(symbol(sym.STRING_LITERAL, yytext())); 
                                return symbol(sym.STRING_LITERAL, 
                                string.toString()); }
 [^\n\r\"\\]+                   { string.append( yytext() ); }

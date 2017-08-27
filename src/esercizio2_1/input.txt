@@ -1,1 +1,2 @@
 /*inline comment*/
+if x < y then x = 10

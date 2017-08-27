@@ -4,6 +4,7 @@ package esercizio2_1;
 
 import java.io.IOException;
 
+
 /* JFlex example: partial Java language lexer specification */
 import java_cup.runtime.*;
 
@@ -359,6 +360,8 @@ class Lexer implements java_cup.runtime.Scanner {
 
 	/* user code: */
 	StringBuffer string = new StringBuffer();
+	
+	TableOfSymbols table = new TableOfSymbols();
 
 	private Symbol symbol(int type) {
 		return new Symbol(type, yyline, yycolumn);
@@ -628,6 +631,14 @@ class Lexer implements java_cup.runtime.Scanner {
 		}
 		return symbols;
 	}
+	
+	/**
+	 * Il metodo permette di restituire tutti i lessemi presenti nella tabella dei simboli
+	 * @return table of symbols
+	 */
+	public TableOfSymbols getTableOfSymbols(){
+		return table;
+	}
 
 	/**
 	 * Resumes scanning until the next regular expression is matched, the end of
@@ -821,7 +832,8 @@ class Lexer implements java_cup.runtime.Scanner {
 				break;
 			case 11: {
 				yybegin(YYINITIAL);
-				return symbol(sym.STRING_LITERAL, string.toString());
+				table.add(symbol(sym.STRING_LITERAL, yytext()));
+				return symbol(sym.STRING_LITERAL, yytext());
 			}
 			case 39:
 				break;
@@ -841,6 +853,7 @@ class Lexer implements java_cup.runtime.Scanner {
 			case 42:
 				break;
 			case 4: {
+				table.add(symbol(sym.INTEGER_LITERAL, yytext()));
 				return symbol(sym.INTEGER_LITERAL);
 			}
 			case 43:
@@ -856,7 +869,8 @@ class Lexer implements java_cup.runtime.Scanner {
 			case 45:
 				break;
 			case 3: {
-				return symbol(sym.IDENTIFIER);
+				table.add(symbol(sym.IDENTIFIER, yytext()));
+				return symbol(sym.IDENTIFIER, yytext());
 			}
 			case 46:
 				break;

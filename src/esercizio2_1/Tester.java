@@ -25,9 +25,14 @@ public class Tester {
 		int i = 0;
 		
 		while(tokens[i]!=null){
-			System.out.println(tokens[i].toString());
+			if(tokens[i].value!=null)
+				System.out.println("("+Wrapper.getClassName(tokens[i].sym)+","+tokens[i].value+")");
+			else
+				System.out.println(Wrapper.getClassName(tokens[i].sym));
 			i++;
 		}
+		System.out.println("\nTabella dei simboli");
+		System.out.println(lexer.getTableOfSymbols().getTable().toString());
 		
 	}
 
