@@ -54,7 +54,7 @@ public class Parser {
 	/*
 	 * I metodi vanno passati tutti a private
 	 */
-	public boolean program(){
+	private boolean program(){
 		
 		if(!stat())
 			return false;
@@ -67,7 +67,7 @@ public class Parser {
 		return true;
 	}
 	
-	public boolean program1(){
+	private boolean program1(){
 		
 		System.out.println("in program 1");
 				
@@ -85,7 +85,7 @@ public class Parser {
 		return true;
 	}
 	
-	public boolean stat(){
+	private boolean stat(){
 		
 		System.out.println("in stat");
 		
@@ -99,7 +99,7 @@ public class Parser {
 		return true;
 	}
 	
-	public boolean matched_stat(){
+	private boolean matched_stat(){
 		
 		System.out.println("in matched stat");
 				
@@ -150,7 +150,7 @@ public class Parser {
 		return true;
 	}
 	
-	public boolean open_stat(){
+	private boolean open_stat(){
 				
 		if(!tokens[pointer].getName().equals("IF"))
 			return false;
@@ -178,7 +178,7 @@ public class Parser {
 		return true;
 	}
 	
-	public boolean open_stat_1(){
+	private boolean open_stat_1(){
 		
 		System.out.println("in open stat 1");
 		System.out.println(tokens[pointer]);
@@ -202,13 +202,13 @@ public class Parser {
 		return true;
 	}
 	
-	public boolean id_num(){
+	private boolean id_num(){
 		if(!tokens[pointer].getName().equals("ID") && !tokens[pointer].getName().equals("NUM"))
 			return false;
 		return true;
 	}
 	
-	public boolean relaz(){
+	private boolean relaz(){
 		if(!tokens[pointer].getName().equals("RELOP"))
 			return false;
 		return true;
