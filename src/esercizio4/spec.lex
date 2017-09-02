@@ -20,6 +20,10 @@ private Symbol symbol(int type, Object value) {
 return new Symbol(type, yyline, yycolumn, value);
 }
 
+public TableOfSymbols getTable(){
+return table;
+}
+
 %}
 
 LineTerminator = \r|\n|\r\n
@@ -81,12 +85,13 @@ write = "->"
 <YYINITIAL> "program"	{ return symbol(sym.PROGRAM); }
 <YYINITIAL> "true"		{ return symbol(sym.TRUE); }
 <YYINITIAL> "false"		{ return symbol(sym.FALSE); }
+<YYINITIAL> "end"		{ return symbol(sym.END); }
 
 <YYINITIAL> {
 
-	{identifier}	{return symbol(sym.IDENTIFIER); }
+	{identifier}	{ table.add(symbol(sym.IDENTIFIER, yytext())); return symbol(sym.IDENTIFIER); }
 	
-	{integer_constant}	{return symbol(sym.INTEGER_CONSTANT); }
+	{integer_constant}	{ table.add(symbol(sym.INTEGER_CONSTANT, yytext())); return symbol(sym.INTEGER_CONSTANT); }
 	
 	\"	{string.setLength(0); yybegin(STRING); }
 	
@@ -127,10 +132,10 @@ write = "->"
 	/*white space*/
 	{WhiteSpace}	{/*ignore*/}
 	
-	{character_constant}	{return symbol(sym.CHARACTER_CONSTANT); }
+	{character_constant}	{ table.add(symbol(sym.CHARACTER_CONSTANT, yytext())); return symbol(sym.CHARACTER_CONSTANT); }
 }
 
 <STRING> {
-	\"						{ yybegin(YYINITIAL); return symbol(sym.STRING, string.toString()); }
+	\"						{ table.add(symbol(sym.STRING, yytext())); yybegin(YYINITIAL); return symbol(sym.STRING, string.toString()); }
 	( [^\n] | [^">"] )+		{ string.append( yytext() ); }
 }
