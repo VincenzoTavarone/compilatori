@@ -1,0 +1,63 @@
+package esercizio4;
+import java_cup.runtime.*;
+
+/* Preliminaries to set up and use the scanner.  */
+init with {:     scanner.init();         :};
+scan with {:         return scanner.next_token();         :};
+
+/*Terminali*/
+terminal String    	LPAR, RPAR, UNARY_MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SEPARATOR, END_PROGRAM, VAR, PROCEDURE, 
+					INTEGER, BOOLEAN, BEGIN, WRITE, READ, IF, THEN, WHILE, DO, END, ASSIGN, RELATIONAL_OPERATOR, ADDING_OPERATOR, 
+					MULTIPLYING_OPERATOR, NOT, TRUE, FALSE, SEPARATOR, ELSE, INTEGER_CONSTANT, STRING_CONSTANT, CHARACTER_CONSTANT;
+
+/*Non Terminali*/
+nonterminal 		program_nt, block, variable_declaration_part, procedure_declaration_part, statement_part, variable_declaration,
+					procedure_declaration, simple_block, compound_statement, statement, simple_statement, structured_statement, assignment_statement,
+					read_statement, procedure_statement, write_statement, expression, output_value, if_statement, while_statement, simple_expression;
+
+/*Non Terminali di supporto */
+nonterminal			variable_declaration_list, separator_identifier;
+			
+nonterminal String	constant_identifier, constant, variable_identifier, variable, adding_operator, procedure_identifier, simple_type, input_variable;
+
+program_nt ::=	PROGRAM IDENTIFIER INSTRUCTION_SEPARATOR block END_PROGRAM
+				|
+				error {: throw new RuntimeException("L'albero di parsing non può essere costruito"); System.exit(0); :}
+				;
+				
+block ::=	variable_declaration_part procedure_declaration_part statement_part 
+			;
+
+variable_declaration_part ::=	VAR variable_declaration INSTRUCTION_SEPARATOR variable_declaration_list
+								|
+								/* epsilon */
+								;
+								
+variable_declaration_list ::=	variable_declaration INSTRUCTION_SEPARATOR variable_declaration_list
+								|
+								/* epsilon */
+								;
+
+variable_declaration ::=	IDENTIFIER separator_identifier simple_type
+							;
+							
+separator_identifier ::=	SEPARATOR IDENTIFIER separator_identifier
+							|
+							/* epsilon */
+							;
+
+simple_type ::=	INTEGER | BOOLEAN ;
+
+procedure_declaration_part ::=	procedure_declaration INSTRUCTION_SEPARATOR procedure_declaration_part
+								|
+								/* epsilon */
+								;
+
+procedure_declaration ::=	PROCEDURE IDENTIFIER INSTRUCTION_SEPARATOR simple_block
+							;
+							
+simple_block ::=	variable_declaration_part simple_statement ;
+
+simple_statement ::=	compound_statement ;
+
+compound_statement ::=	
