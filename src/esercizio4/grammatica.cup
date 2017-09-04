@@ -23,11 +23,10 @@ precedence left ASSIGN, READ, WRITE;
 precedence left ELSE;
 precedence left RELATIONAL_OPERATOR;
 precedence left UNARY_MINUS;
+precedence left SEPARATOR, IDENTIFIER;
 
 
 program_nt ::=	PROGRAM IDENTIFIER INSTRUCTION_SEPARATOR block END_PROGRAM
-				|
-				error {: throw new RuntimeException("L'albero di parsing non può essere costruito"); System.exit(0); :}
 				;
 				
 block ::=	variable_declaration_part procedure_declaration_part statement_part 

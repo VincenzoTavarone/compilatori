@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import java_cup.runtime.Symbol;
 
+
 public class Tester {
 	
 	public static void main(String[] args) {
@@ -39,6 +40,21 @@ public class Tester {
 		
 		System.out.println(lexer.getTable().getTable().toString());
 		
+		GrammaticaCup cup = null;
+		
+		try {
+			cup = new GrammaticaCup(new Lexer(new FileReader(file)));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			System.out.println(cup.parse().value);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
