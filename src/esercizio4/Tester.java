@@ -10,7 +10,7 @@ import java_cup.runtime.Symbol;
 
 public class Tester {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		System.out.println("esercizio 4\n");
 		
@@ -36,25 +36,12 @@ public class Tester {
 			e.printStackTrace();
 		}
 		
-		System.out.println("\nTabella dei simboli\n");
+		System.out.println("\n");
 		
-		System.out.println(lexer.getTable().getTable().toString());
+		GrammaticaCup parser = new GrammaticaCup(new Lexer(new FileReader(file)));
 		
-		GrammaticaCup cup = null;
+		System.out.println(parser.parse());
 		
-		try {
-			cup = new GrammaticaCup(new Lexer(new FileReader(file)));
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			System.out.println(cup.parse().value);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

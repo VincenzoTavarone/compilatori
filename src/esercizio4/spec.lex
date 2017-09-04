@@ -136,6 +136,6 @@ write = "->"
 }
 
 <STRING> {
-	\"						{ table.add(symbol(sym.STRING, yytext())); yybegin(YYINITIAL); return symbol(sym.STRING, string.toString()); }
+	\"						{ table.add(symbol(sym.STRING_CONSTANT, yytext())); yybegin(YYINITIAL); return symbol(sym.STRING_CONSTANT, string.toString()); }
 	( [^\n] | [^">"] )+		{ string.append( yytext() ); }
 }
