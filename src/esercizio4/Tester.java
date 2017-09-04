@@ -28,7 +28,7 @@ public class Tester {
 		
 		try {
 			while((symbol = lexer.next_token()) != null){
-				System.out.println(symbol);
+				System.out.println(Wrapper.getClassName(symbol.sym));
 				if(symbol.sym == sym.EOF)
 					break;
 			}

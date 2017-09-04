@@ -42,7 +42,7 @@ integer_constant = 0 | [1-9] {digit}*
 
 character_constant = [^">"] | [^""]
 
-instruction_separator =	;
+instruction_separator =	";"
 
 end_program = "."
 
