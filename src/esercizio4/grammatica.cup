@@ -1,4 +1,13 @@
 package esercizio4;
+import java_cup.runtime.*;
+
+parser code {:
+	Scanner scanner;
+	GrammaticaCup(Scanner s, String c){ super(s); this.scanner = s;}
+:};
+
+
+scan with {: return scanner.next_token(); :};
 
 /*Terminali*/
 terminal String    	LPAR, RPAR, UNARY_MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SEPARATOR, END_PROGRAM, VAR, PROCEDURE, 

@@ -38,7 +38,7 @@ public class Tester {
 		
 		System.out.println("\n");
 		
-		GrammaticaCup parser = new GrammaticaCup(new Lexer(new FileReader(file)));
+		GrammaticaCup parser = new GrammaticaCup(new Lexer(new FileReader(file)), "");
 		
 		System.out.println(parser.parse());
 		
