@@ -10,7 +10,7 @@ parser code {:
 scan with {:
 	Symbol next = scanner.next_token();
 	System.out.println(Wrapper.getClassName(next.sym));
-	return scanner.next_token(); 
+	return next;
 :};
 
 /*Terminali*/
@@ -35,7 +35,6 @@ precedence left ASSIGN, READ, WRITE;
 precedence left ELSE;
 precedence left RELATIONAL_OPERATOR;
 precedence left UNARY_MINUS;
-precedence left SEPARATOR, IDENTIFIER;
 
 program_nt ::=	PROGRAM IDENTIFIER INSTRUCTION_SEPARATOR block END_PROGRAM
 				;
@@ -115,7 +114,7 @@ structured_statement ::= compound_statement | if_statement | while_statement ;
 
 if_statement ::=	IF expression THEN statement
 					|
-					IF expression THEN statement ELSE statement 
+					IF expression THEN statement ELSE statement %prec ELSE
 					;
 					
 while_statement ::=	WHILE expression DO statement ;
@@ -137,7 +136,7 @@ simple_expression ::=	simple_expression ADDING_OPERATOR simple_expression
 						|
 						NOT expression
 						|
-						UNARY_MINUS simple_expression 
+						UNARY_MINUS simple_expression %prec UNARY_MINUS
 						;
 						
 variable ::= variable_identifier ;

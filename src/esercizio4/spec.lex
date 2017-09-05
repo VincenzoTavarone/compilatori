@@ -118,7 +118,7 @@ write = "->"
 	/*multiplying_operator*/
 	"*"		{return symbol(sym.MULTIPLYING_OPERATOR, "MUL"); }
 	"/"		{return symbol(sym.MULTIPLYING_OPERATOR, "DIV"); }
-	"&&"	{return symbol(sym.MULTIPLYING_OPERATOR, "DE"); }
+	"&&"	{return symbol(sym.MULTIPLYING_OPERATOR, "AND"); }
 	
 	/*separatori*/
 	{instruction_separator}		{return symbol(sym.INSTRUCTION_SEPARATOR); }
