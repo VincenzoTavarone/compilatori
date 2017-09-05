@@ -6,7 +6,7 @@ procedure proc1;
 var a1 integer;
 a,b1 boolean;
 begin
-a2 := a1 + 25  &&  -4;
+a2 := a1 + 25  &&  4;
 <-( a1 );
 proc1 ;
 if a1 > a1 then
