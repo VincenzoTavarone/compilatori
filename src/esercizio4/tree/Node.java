@@ -8,6 +8,10 @@ public class Node<T> {
 	private T value;
 	private List<Node<T>> children;
 	
+	public Node(){
+		
+	}
+	
 	public Node(T value) {
 		this.setValue(value);
 	}

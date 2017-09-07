@@ -40,7 +40,7 @@ identifier = {letter} {letterOrDigit}*
 
 integer_constant = 0 | [1-9] {digit}*
 
-character_constant = [^">"] | [^""]
+character_constant = '[^>]'
 
 instruction_separator =	";"
 
@@ -137,5 +137,5 @@ write = "->"
 
 <STRING> {
 	\"						{ table.add(symbol(sym.STRING_CONSTANT, yytext())); yybegin(YYINITIAL); return symbol(sym.STRING_CONSTANT, string.toString()); }
-	( [^\n] | [^">"] )+		{ string.append( yytext() ); }
+	([^\n>])				{ string.append( yytext() ); }
 }

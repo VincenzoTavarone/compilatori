@@ -19,7 +19,7 @@ terminal String    	LPAR, RPAR, UNARY_MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SE
 					MULTIPLYING_OPERATOR, NOT, TRUE, FALSE, SEPARATOR, ELSE, INTEGER_CONSTANT, STRING_CONSTANT, CHARACTER_CONSTANT;
 
 /*Non Terminali*/
-nonterminal 		program_nt, block, variable_declaration_part, procedure_declaration_part, statement_part, variable_declaration,
+nonterminal			program_nt, block, variable_declaration_part, procedure_declaration_part, statement_part, variable_declaration,
 					procedure_declaration, simple_block, compound_statement, statement, simple_statement, structured_statement, assignment_statement,
 					read_statement, procedure_statement, write_statement, expression, output_value, if_statement, while_statement, simple_expression;
 

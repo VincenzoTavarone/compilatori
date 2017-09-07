@@ -17,5 +17,5 @@ else ->(p, c)
 end;
 begin
 if a1 > a1 then
-b:=1
+b:= "stringa"
 end.
