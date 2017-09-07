@@ -14,7 +14,7 @@ scan with {:
 :};
 
 /*Terminali*/
-terminal String    	LPAR, RPAR, UNARY_MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SEPARATOR, END_PROGRAM, VAR, PROCEDURE, 
+terminal String    	LPAR, RPAR, MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SEPARATOR, END_PROGRAM, VAR, PROCEDURE, 
 					INTEGER, BOOLEAN, BEGIN, WRITE, READ, IF, THEN, WHILE, DO, END, ASSIGN, RELATIONAL_OPERATOR, ADDING_OPERATOR, 
 					MULTIPLYING_OPERATOR, NOT, TRUE, FALSE, SEPARATOR, ELSE, INTEGER_CONSTANT, STRING_CONSTANT, CHARACTER_CONSTANT;
 
@@ -24,7 +24,7 @@ nonterminal			program_nt, block, variable_declaration_part, procedure_declaratio
 					read_statement, procedure_statement, write_statement, expression, output_value, if_statement, while_statement, simple_expression;
 
 /*Non Terminali di supporto */
-nonterminal			variable_declaration_list, separator_identifier, instruction_separator_statement, separator_input_variable, separator_output_value;
+nonterminal			variable_declaration_list, separator_identifier, instruction_separator_statement, separator_input_variable, separator_output_value, adding_operator;
 			
 nonterminal String	constant_identifier, constant, variable_identifier, variable, procedure_identifier, simple_type, input_variable;
 
@@ -34,7 +34,7 @@ precedence left MULTIPLYING_OPERATOR;
 precedence left ASSIGN, READ, WRITE;
 precedence left ELSE;
 precedence left RELATIONAL_OPERATOR;
-precedence left UNARY_MINUS;
+precedence right MINUS;
 
 program_nt ::=	PROGRAM IDENTIFIER INSTRUCTION_SEPARATOR block END_PROGRAM
 				;
@@ -124,7 +124,7 @@ expression ::=	simple_expression
 				simple_expression RELATIONAL_OPERATOR simple_expression
 				;
 				
-simple_expression ::=	simple_expression ADDING_OPERATOR simple_expression
+simple_expression ::=	simple_expression adding_operator simple_expression
 						|
 						simple_expression MULTIPLYING_OPERATOR simple_expression
 						|
@@ -136,8 +136,13 @@ simple_expression ::=	simple_expression ADDING_OPERATOR simple_expression
 						|
 						NOT expression
 						|
-						UNARY_MINUS simple_expression %prec UNARY_MINUS
+						MINUS simple_expression %prec MINUS
 						;
+						
+adding_operator ::=	ADDING_OPERATOR
+					|
+					MINUS
+					;
 						
 variable ::= variable_identifier ;
 

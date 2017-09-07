@@ -25,7 +25,7 @@ public class Lexer {
 		
 		Token[] tokens = new Token[24];
 		int index = 0; //indice array tokens
-		Map tabella_simboli = new HashMap();
+		Map<String, Object> tabella_simboli = new HashMap<String, Object>();
 		/*
 		 * Preinstallo le parole chiave
 		 */

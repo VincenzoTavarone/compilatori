@@ -40,7 +40,7 @@ identifier = {letter} {letterOrDigit}*
 
 integer_constant = 0 | [1-9] {digit}*
 
-character_constant = '[^>]'
+character_constant = '[^']'
 
 instruction_separator =	";"
 
@@ -54,7 +54,7 @@ rpar = ")"
 
 assign = ":="
 
-unary_minus = ":-"
+//unary_minus = ":-"
 
 //multiplying_operator = "*" | "/" | "&&"
 
@@ -97,14 +97,13 @@ write = "->"
 	
 	/*operatori*/
 	{assign}		{return symbol(sym.ASSIGN); }
-	{unary_minus}	{return symbol(sym.UNARY_MINUS); }
 	{not}			{return symbol(sym.NOT); }
 	{read}			{return symbol(sym.READ); }	
 	{write}			{return symbol(sym.WRITE); }
 	
 	/*adding_operator*/
 	"+"		{return symbol(sym.ADDING_OPERATOR, "PLUS"); }
-	"-"		{return symbol(sym.ADDING_OPERATOR, "MINUS"); }
+	"-"		{return symbol(sym.MINUS); }
 	"||"	{return symbol(sym.ADDING_OPERATOR, "OR"); }
 	
 	/*relational_operator*/
@@ -137,5 +136,5 @@ write = "->"
 
 <STRING> {
 	\"						{ table.add(symbol(sym.STRING_CONSTANT, yytext())); yybegin(YYINITIAL); return symbol(sym.STRING_CONSTANT, string.toString()); }
-	([^\n>])				{ string.append( yytext() ); }
+	([^\n])					{ string.append( yytext() ); }
 }

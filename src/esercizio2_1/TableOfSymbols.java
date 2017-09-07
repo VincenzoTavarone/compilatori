@@ -6,10 +6,10 @@ import java_cup.runtime.Symbol;
 
 public class TableOfSymbols {
 	
-	private HashMap table;
+	private HashMap<Object, String> table;
 	
 	public TableOfSymbols(){
-		this.table = new HashMap();
+		this.table = new HashMap<Object, String>();
 	}
 	
 	public void add(Symbol symbol){
@@ -20,7 +20,7 @@ public class TableOfSymbols {
 		return (String) table.get(symbol.value);
 	}
 	
-	public HashMap getTable(){
+	public HashMap<Object, String> getTable(){
 		return table;
 	}
 	

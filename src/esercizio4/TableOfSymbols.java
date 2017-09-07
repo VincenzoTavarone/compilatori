@@ -6,21 +6,21 @@ import java_cup.runtime.Symbol;
 
 public class TableOfSymbols {
 	
-	private HashMap table;
+	private HashMap<String, String> table;
 	
 	public TableOfSymbols(){
-		this.table = new HashMap();
+		this.table = new HashMap<String, String>();
 	}
 	
 	public void add(Symbol symbol){
-		table.put(symbol.value, Wrapper.getClassName(symbol.sym));
+		table.put((String)symbol.value, Wrapper.getClassName(symbol.sym));
 	}
 	
 	public String get(Symbol symbol){
 		return (String) table.get(symbol.value);
 	}
 	
-	public HashMap getTable(){
+	public HashMap<String, String> getTable(){
 		return table;
 	}
 	

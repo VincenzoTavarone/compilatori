@@ -7,7 +7,7 @@ public class Wrapper {
 			"error",
 			"LPAR",
 			"RPAR",
-			"UNARY_MINUS",
+			"MINUS",
 			"PROGRAM",
 			"IDENTIFIER",
 			"INSTRUCTION_SEPARATOR",
