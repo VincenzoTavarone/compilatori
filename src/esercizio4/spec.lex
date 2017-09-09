@@ -89,9 +89,9 @@ write = "->"
 
 <YYINITIAL> {
 
-	{identifier}	{ table.add(symbol(sym.IDENTIFIER, yytext())); return symbol(sym.IDENTIFIER); }
+	{identifier}	{ table.add(symbol(sym.IDENTIFIER, yytext())); return symbol(sym.IDENTIFIER, yytext()); }
 	
-	{integer_constant}	{ table.add(symbol(sym.INTEGER_CONSTANT, yytext())); return symbol(sym.INTEGER_CONSTANT); }
+	{integer_constant}	{ table.add(symbol(sym.INTEGER_CONSTANT, yytext())); return symbol(sym.INTEGER_CONSTANT, yytext()); }
 	
 	\"	{string.setLength(0); yybegin(STRING); }
 	
@@ -131,7 +131,7 @@ write = "->"
 	/*white space*/
 	{WhiteSpace}	{/*ignore*/}
 	
-	{character_constant}	{ table.add(symbol(sym.CHARACTER_CONSTANT, yytext())); return symbol(sym.CHARACTER_CONSTANT); }
+	{character_constant}	{ table.add(symbol(sym.CHARACTER_CONSTANT, yytext())); return symbol(sym.CHARACTER_CONSTANT, yytext()); }
 }
 
 <STRING> {
