@@ -102,9 +102,9 @@ write = "->"
 	{write}			{return symbol(sym.WRITE); }
 	
 	/*adding_operator*/
-	"+"		{return symbol(sym.ADDING_OPERATOR, "PLUS"); }
+	"+"		{return symbol(sym.ADDING_OPERATOR, "+"); }
 	"-"		{return symbol(sym.MINUS); }
-	"||"	{return symbol(sym.ADDING_OPERATOR, "OR"); }
+	"||"	{return symbol(sym.ADDING_OPERATOR, "||"); }
 	
 	/*relational_operator*/
 	"=="	{return symbol(sym.RELATIONAL_OPERATOR, "EQEQ"); }
