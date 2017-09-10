@@ -1,5 +1,6 @@
 package esercizio4.tree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Node<T> {
@@ -9,11 +10,12 @@ public class Node<T> {
 	private List<Node<T>> children;
 	
 	public Node(){
-		
+		children = new ArrayList<Node<T>>();
 	}
 	
 	public Node(T value) {
 		this.setValue(value);
+		children = new ArrayList<Node<T>>();
 	}
 
 	public T getValue() {
