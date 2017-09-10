@@ -1,5 +1,6 @@
 package esercizio4;
 import java_cup.runtime.*;
+import java.util.ArrayList;
 import esercizio4.visitor.*;
 
 parser code {:
@@ -12,6 +13,14 @@ action code {:
 		VisitableNode<String> node = new VisitableNode<String>(type, null);
 		for(int i = 0; i < children.length; i++){
 			node.addChild(children[i]);
+		}
+		return node;
+	}
+	
+	private VisitableNode<String> buildNode(String type, ArrayList<VisitableNode<String>> children){
+		VisitableNode<String> node = new VisitableNode<String>(type, null);
+		for(int i = 0; i < children.size(); i++){
+			node.addChild(children.get(i));
 		}
 		return node;
 	}
@@ -34,14 +43,15 @@ terminal String    	LPAR, RPAR, MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SEPARATO
 					MULTIPLYING_OPERATOR, NOT, TRUE, FALSE, SEPARATOR, ELSE, INTEGER_CONSTANT, STRING_CONSTANT, CHARACTER_CONSTANT;
 
 /*Non Terminali*/
-nonterminal VisitableNode<String>	program_nt, block, variable_declaration_part, procedure_declaration_part, statement_part, variable_declaration,
-									procedure_declaration, simple_block, compound_statement, statement, simple_statement, structured_statement, assignment_statement,
-									read_statement, write_statement, expression, output_value, if_statement, while_statement, simple_expression, constant;
+nonterminal VisitableNode<String>	program_nt, block, variable_declaration_part, statement_part, variable_declaration, procedure_declaration,
+									simple_block, compound_statement, statement, simple_statement, structured_statement, assignment_statement,
+									read_statement, write_statement, expression, output_value, if_statement, while_statement, simple_expression, constant, procedure_statement;
 
 /*Non Terminali di supporto */
-nonterminal	VisitableNode<String> variable_declaration_list, separator_identifier, instruction_separator_statement, separator_input_variable, separator_output_value;
+nonterminal	ArrayList<VisitableNode<String>>	variable_declaration_list, separator_identifier, instruction_separator_statement, separator_input_variable, separator_output_value,
+												procedure_declaration_part;
 			
-nonterminal String	constant_identifier, variable_identifier, variable, procedure_identifier, simple_type, input_variable, adding_operator, procedure_statement;
+nonterminal String	constant_identifier, variable_identifier, variable, procedure_identifier, simple_type, input_variable, adding_operator;
 
 /*Precendenze*/
 precedence left ADDING_OPERATOR;
@@ -67,72 +77,157 @@ variable_declaration_list ::=	variable_declaration INSTRUCTION_SEPARATOR variabl
 								/* epsilon */
 								;
 
-variable_declaration ::=	IDENTIFIER separator_identifier simple_type
+variable_declaration ::=	IDENTIFIER:attr separator_identifier:list simple_type:v {:
+								if(list!=null){
+									list.add(buildNodeWithValue("ID", attr));
+									list.add(buildNode(v));
+									RESULT = buildNode("VarDeclOp", list);
+								}
+								else
+									RESULT = buildNode("VarDeclOp", buildNodeWithValue("ID", attr));				
+							:}
 							;
 							
-separator_identifier ::=	SEPARATOR IDENTIFIER separator_identifier
+separator_identifier ::=	SEPARATOR IDENTIFIER:attr separator_identifier:list {:
+								ArrayList<VisitableNode<String>> result = new ArrayList<VisitableNode<String>>();
+								result.add(buildNodeWithValue("ID", attr));
+								if(list!=null)
+									result.addAll(list);
+								RESULT = result;	
+							:}
 							|
 							/* epsilon */
 							;
 
-simple_type ::=	INTEGER | BOOLEAN ;
+simple_type ::=	INTEGER {: RESULT = "INTEGER";:} | BOOLEAN {: RESULT = "BOOLEAN";:} ;
 
-procedure_declaration_part ::=	procedure_declaration INSTRUCTION_SEPARATOR procedure_declaration_part
+procedure_declaration_part ::=	procedure_declaration:node INSTRUCTION_SEPARATOR procedure_declaration_part:list {:
+									ArrayList<VisitableNode<String>> result = new ArrayList<VisitableNode<String>>();
+									result.add(node);
+									if(list!=null)
+										result.addAll(list);
+									RESULT = result;
+								:}
 								|
 								/* epsilon */
 								;
 
-procedure_declaration ::=	PROCEDURE IDENTIFIER INSTRUCTION_SEPARATOR simple_block
+procedure_declaration ::=	PROCEDURE IDENTIFIER:v INSTRUCTION_SEPARATOR simple_block:node {:
+								RESULT = buildNode("ProcDeclOp", buildNodeWithValue("ID", v), node);
+							:}
 							;
 							
-simple_block ::=	variable_declaration_part statement_part ;
+simple_block ::=	variable_declaration_part:node_1 statement_part:node_2 {:
+						RESULT = buildNode("SimpleBlockOp", node_1, node_2);
+					:} ;
 
-statement_part ::=	compound_statement ;
+statement_part ::=	compound_statement:ptr {: RESULT = ptr; :} ;
 
-compound_statement ::=	BEGIN statement instruction_separator_statement END
+compound_statement ::=	BEGIN statement:stmt instruction_separator_statement:list END {:
+							if(list!=null){
+								list.add(0, stmt);
+								RESULT = buildNode("CompStatOp", list);
+							}else
+								RESULT = buildNode("CompStatOp", stmt);
+						:}
 						;
 						
-instruction_separator_statement ::=	INSTRUCTION_SEPARATOR statement instruction_separator_statement
+instruction_separator_statement ::=	INSTRUCTION_SEPARATOR statement:stmt instruction_separator_statement:node {:
+										ArrayList<VisitableNode<String>> result = new ArrayList<VisitableNode<String>>();
+										result.add(stmt);
+										if(node!=null)
+											result.addAll(node);
+										RESULT = result;
+									:}
 									|
 									/* epsilon */
 									;
 									
-statement ::=	simple_statement | structured_statement ;
+statement ::=	simple_statement:ptr {: RESULT = ptr; :}
+				|
+				structured_statement:ptr {: RESULT = ptr; :}
+				;
 
-simple_statement ::=	assignment_statement | read_statement | procedure_statement | write_statement ;
+simple_statement ::=	assignment_statement:ptr {: RESULT = ptr; :}
+						|
+						read_statement:ptr {: RESULT = ptr; :}
+						| 
+						procedure_statement:ptr {: RESULT = ptr; :}
+						|
+						write_statement:ptr {: RESULT = ptr; :}
+						;
 
-assignment_statement ::=	variable:id ASSIGN expression;
+assignment_statement ::=	variable:id ASSIGN expression:exp {:
+								RESULT = buildNode("AssignOp", buildNodeWithValue("ID", id), exp);
+							:};
 
-read_statement ::=	READ LPAR input_variable separator_input_variable RPAR ;
+read_statement ::=	READ LPAR input_variable:v separator_input_variable:list RPAR {:
+						if(list!=null){
+							list.add(0,buildNodeWithValue("ID", v));
+							RESULT = buildNode("ReadOp", list);
+						}
+						else
+							RESULT = buildNode("ReadOp", buildNodeWithValue("ID", v));
+					:};
 
-separator_input_variable ::=	SEPARATOR input_variable separator_input_variable
+separator_input_variable ::=	SEPARATOR input_variable:v separator_input_variable:node {:
+									ArrayList<VisitableNode<String>> result = new ArrayList<VisitableNode<String>>();
+									result.add(buildNodeWithValue("ID", v));
+									if(node!=null)
+										result.addAll(node);
+									RESULT = result;
+								:}
 								|
 								/* epsilon */
 								;
 								
 input_variable ::= variable:v {: RESULT = v;:};
 
-procedure_statement ::= procedure_identifier:p_id {: RESULT = p_id; :} ;
+procedure_statement ::= procedure_identifier:p_id {: RESULT = buildNode("CallOp", buildNodeWithValue("ID", p_id)); :} ;
 
 procedure_identifier ::= IDENTIFIER:id {: RESULT = id; :} ;
 
-write_statement ::= WRITE LPAR output_value separator_output_value RPAR ;
+write_statement ::= WRITE LPAR output_value:node_1 separator_output_value:list RPAR {:
+						if(list!=null){
+							list.add(0, node_1);
+							RESULT = buildNode("WriteOp", list);
+						}else
+							RESULT = buildNode("WriteOp", node_1);
+						
+					:} ;
 
-separator_output_value ::=	SEPARATOR output_value separator_output_value
+separator_output_value ::=	SEPARATOR output_value:node_1 separator_output_value:node_2 {:
+								ArrayList<VisitableNode<String>> result = new ArrayList<VisitableNode<String>>();
+								result.add(node_1);
+								if(node_2!=null)
+									result.addAll(node_2);
+								RESULT = result;
+							:}
 							|
 							/* epsilon */
 							;
 
-output_value ::= expression ;
+output_value ::= expression:node {: RESULT = node; :} ;
 
-structured_statement ::= compound_statement | if_statement | while_statement ;
+structured_statement ::=	compound_statement:node {: RESULT = node; :}
+							|
+							if_statement:node {: RESULT = node; :}
+							| 
+							while_statement:node {: RESULT = node; :}
+							;
 
-if_statement ::=	IF expression THEN statement
+if_statement ::=	IF expression:exp THEN statement:stmt {:
+						RESULT = buildNode("IfThenOp", exp, stmt);
+					:}
 					|
-					IF expression THEN statement ELSE statement %prec ELSE
+					IF expression:exp THEN statement:stmt_1 ELSE statement:stmt_2 {:
+						RESULT = buildNode("IfThenElseOp", exp, stmt_1, stmt_2);
+					:} %prec ELSE
 					;
 					
-while_statement ::=	WHILE expression DO statement ;
+while_statement ::=	WHILE expression:ptr DO statement:st_ptr {:
+						RESULT = buildNode("WhileOp", ptr, st_ptr);
+					:} ;
 
 expression ::=	simple_expression:node {: RESULT = buildNode("SimpleExprOp", node); :}
 				|
