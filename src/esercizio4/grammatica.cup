@@ -63,13 +63,15 @@ precedence right MINUS;
 
 program_nt ::=	PROGRAM IDENTIFIER:v INSTRUCTION_SEPARATOR block:node END_PROGRAM {:
 					VisitableNode<String> root = buildNode("ProgramOp", buildNodeWithValue("ID", v), node);
-					//SyntaxTree<String> tree = new SyntaxTree<String>(root);
+					SyntaxTree<String> tree = new SyntaxTree<String>();
+					tree.visit(root);
+					tree.write();
 					RESULT = root;
 				:}
 				;
 				
-block ::=	variable_declaration_part:node_1 procedure_declaration_part:list statement_part:node_3 {:
-				RESULT = buildNode("BlockOp", node_1, buildNode("ProcDeclPartOp", list), node_3);
+block ::=	variable_declaration_part:node_1 procedure_declaration_part:list statement_part:node_2 {:
+				RESULT = buildNode("BlockOp", node_1, buildNode("ProcDeclPartOp", list), node_2);
 			:} 
 			;
 
@@ -98,12 +100,12 @@ variable_declaration_list ::=	variable_declaration:node_1 INSTRUCTION_SEPARATOR 
 
 variable_declaration ::=	IDENTIFIER:attr separator_identifier:list simple_type:v {:
 								if(list!=null){
-									list.add(buildNodeWithValue("ID", attr));
-									list.add(buildNode(v));
+									list.add(0,buildNode(v));
+									list.add(1,buildNodeWithValue("ID", attr));
 									RESULT = buildNode("VarDeclOp", list);
 								}
 								else
-									RESULT = buildNode("VarDeclOp", buildNodeWithValue("ID", attr));				
+									RESULT = buildNode("VarDeclOp",buildNode(v), buildNodeWithValue("ID", attr));				
 							:}
 							;
 							

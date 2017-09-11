@@ -23,8 +23,15 @@ public class VisitableNode<T> extends Node<T> implements Visitable{
 		this.type = type;
 	}
 	
-	public void accept(Visitor visitor){
-		visitor.visit(this);
+	public String accept(Visitor visitor){
+		return visitor.visit(this);
+	}
+	
+	@Override
+	public String toString() {
+		if(this.getValue()!=null)
+			return this.getType()+" attr=\""+this.getValue()+"\"";
+		return this.getType();
 	}
 
 }
