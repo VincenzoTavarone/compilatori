@@ -27,6 +27,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				
 			}
 		}
+		//regola A
 		if(node.getType().equals("ProgramOp") || node.getType().equals("ProcDeclPartOp"))
 			stack.pop();
 		return null;

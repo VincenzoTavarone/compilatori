@@ -16,8 +16,8 @@ public class TableOfSymbols {
 		table.put((String)symbol.value, Wrapper.getClassName(symbol.sym));
 	}
 	
-	public String get(Symbol symbol){
-		return (String) table.get(symbol.value);
+	public String get(String key){
+		return (String) table.get(key);
 	}
 	
 	public HashMap<String, String> getTable(){
