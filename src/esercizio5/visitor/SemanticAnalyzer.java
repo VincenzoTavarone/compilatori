@@ -41,6 +41,11 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 						e.printStackTrace();
 					}
 				}
+				//regola D
+				if(current.getName().equals("ConstOp")){
+					current.setType(((VisitableNode<String>) current.getChildren().get(0)).getType());
+				}
+				//regola E
 			}else{
 				
 			}
@@ -76,6 +81,19 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 	//regola C
 	private void checkRuleC(VisitableNode<String> current) throws NotDeclaredIdException{
 		
+		VisitableNode<String> child = (VisitableNode<String>) current.getChildren().get(0);
+		boolean find = false;
+
+		for(int i = stack.size()-1; i >=0; i--){
+			if(!find){
+				HashMap<String, Node<String>> current_table = stack.get(i).getTable();
+				if(current_table.containsKey(child.getValue())){
+					find = true;
+				}
+			}
+		}
+		if(!find)
+			throw new NotDeclaredIdException("Identificatore non dichiarato");
 	}
 
 }
