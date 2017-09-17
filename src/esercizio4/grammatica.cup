@@ -298,4 +298,5 @@ constant ::= INTEGER_CONSTANT:c {: RESULT = buildNodeWithValue("INTEGER_CONSTANT
 
 constant_identifier ::=	TRUE {: RESULT = Wrapper.getClassName(sym.TRUE); :} 
 						|
-						FALSE {: RESULT = Wrapper.getClassName(sym.FALSE); :};
+						FALSE {: RESULT = Wrapper.getClassName(sym.FALSE); :}
+						;
