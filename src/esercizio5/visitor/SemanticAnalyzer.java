@@ -44,7 +44,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				}
 				//regola D
 				if(current.getName().equals("ConstOp")){
-					current.setType(((VisitableNode<String>) current.getChildren().get(0)).getType());
+					checkRuleD(current);
 				}
 				//regole E
 				//WhileOp
@@ -56,6 +56,9 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				//AddOp && MulOp
 				if(current.getName().equals("AddOp")||current.getName().equals("MulOp"))
 					checkAddOpOrMultOp(current);
+				//NotOp
+				if(current.getName().equals("NotOp"))
+					checkNotOp(current);
 			}
 		}
 		//regola A
@@ -102,6 +105,24 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		}
 		if(!find)
 			throw new NotDeclaredIdException("Identificatore non dichiarato");
+	}
+	
+	//regola D
+	private void checkRuleD(VisitableNode<String> current){
+		VisitableNode<String> child = (VisitableNode<String>)current.getChildren().get(0);
+		switch (child.getName()) {
+		case "INTEGER_CONSTANT":
+			current.setType("INTEGER");
+			break;
+		case "STRING_CONSTANT":
+			current.setType("STRING");
+			break;
+		case "CHARACTER_CONSTANT":
+			current.setType("CHARACTER");
+			break;
+		case "BOOLEAN_CONSTANT":
+			current.setType("BOOLEAN");
+		}
 	}
 	
 	//TYPE SYSTEM
@@ -151,6 +172,20 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 			throw new TypeMismatchException();
 	}
 	
+	//costrutto notOp
+	private void checkNotOp(VisitableNode<String> current) throws TypeMismatchException{
+		
+		VisitableNode<String> child = (VisitableNode<String>)current.getChildren().get(0);
+		
+		if(child.getType()==null)
+			child.accept(this);
+		
+		if(child.getType().equals("BOOLEAN")||child.getType().equals("INTEGER"))
+			current.setType("BOOLEAN");
+		else
+			throw new TypeMismatchException();
+			
+	}
 	
 	
 
