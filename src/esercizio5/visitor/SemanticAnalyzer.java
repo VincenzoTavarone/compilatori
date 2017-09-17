@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import esercizio5.exception.MultiDeclarationsException;
 import esercizio5.exception.NotDeclaredIdException;
+import esercizio5.exception.TypeMismatchException;
 import esercizio5.tree.Node;
 import esercizio5.tree.Tree;
 
@@ -45,9 +46,11 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				if(current.getName().equals("ConstOp")){
 					current.setType(((VisitableNode<String>) current.getChildren().get(0)).getType());
 				}
-				//regola E
-			}else{
-				
+				//inizio regole E
+				//WhileOp
+				if(current.getName().equals("WhileOp"))
+					checkWhileOp(current);
+					
 			}
 		}
 		//regola A
@@ -95,5 +98,22 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(!find)
 			throw new NotDeclaredIdException("Identificatore non dichiarato");
 	}
+	
+	//TYPE SYSTEM
+	//costrutto while
+	private void checkWhileOp(VisitableNode<String> current) throws TypeMismatchException{
+		
+		VisitableNode<String> left = (VisitableNode<String>)current.getChildren().get(0);
+		//Controllo se il nodo è già stato valutato
+		if(left.getType()==null)
+			left.accept(this);
+		if(left.getType().equals("BOOLEAN")||left.getType().equals("INTEGER"))
+			current.setType("VOID");
+		else
+			throw new TypeMismatchException("");
+	}
+	
+	
+	
 
 }
