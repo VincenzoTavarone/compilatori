@@ -9,24 +9,24 @@ parser code {:
 :};
 
 action code {:
-	private VisitableNode<String> buildNode(String type, VisitableNode<String>... children){
-		VisitableNode<String> node = new VisitableNode<String>(type, null);
+	private VisitableNode<String> buildNode(String name, VisitableNode<String>... children){
+		VisitableNode<String> node = new VisitableNode<String>(name, null);
 		for(int i = 0; i < children.length; i++){
 			node.addChild(children[i]);
 		}
 		return node;
 	}
 	
-	private VisitableNode<String> buildNode(String type, ArrayList<VisitableNode<String>> children){
-		VisitableNode<String> node = new VisitableNode<String>(type, null);
+	private VisitableNode<String> buildNode(String name, ArrayList<VisitableNode<String>> children){
+		VisitableNode<String> node = new VisitableNode<String>(name, null);
 		for(int i = 0; i < children.size(); i++){
 			node.addChild(children.get(i));
 		}
 		return node;
 	}
 	
-	private VisitableNode<String> buildNodeWithValue(String type, String value){
-		return new VisitableNode<String>(type, value);
+	private VisitableNode<String> buildNodeWithValue(String name, String value){
+		return new VisitableNode<String>(name, value);
 	}
 :};
 

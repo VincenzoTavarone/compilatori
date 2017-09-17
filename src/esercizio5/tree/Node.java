@@ -82,7 +82,7 @@ public class Node<T> {
 		return table.get(key);
 	}
 	
-	public void putElement(String key, Node<String> node){
-		table.put(key, node);
+	public void putElement(Node<String> node){
+		table.put(node.getValue(), node);
 	}
 }
