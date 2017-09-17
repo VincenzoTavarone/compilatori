@@ -46,11 +46,16 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				if(current.getName().equals("ConstOp")){
 					current.setType(((VisitableNode<String>) current.getChildren().get(0)).getType());
 				}
-				//inizio regole E
+				//regole E
 				//WhileOp
 				if(current.getName().equals("WhileOp"))
 					checkWhileOp(current);
-					
+				//AssingOp
+				if(current.getName().equals("AssignOp"))
+					checkAssingOp(current);
+				//AddOp && MulOp
+				if(current.getName().equals("AddOp")||current.getName().equals("MulOp"))
+					checkAddOpOrMultOp(current);
 			}
 		}
 		//regola A
@@ -111,6 +116,39 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 			current.setType("VOID");
 		else
 			throw new TypeMismatchException("");
+	}
+	
+	//costrutto assign
+	private void checkAssingOp(VisitableNode<String> current) throws TypeMismatchException{
+		
+		VisitableNode<String> left = (VisitableNode<String>)current.getChildren().get(0);
+		VisitableNode<String> right = (VisitableNode<String>)current.getChildren().get(1);
+		
+		if(right.getType()==null)
+			right.accept(this);
+		
+		if(left.getType().equals(right.getType()))
+			current.setType("VOID");
+		else
+			throw new TypeMismatchException();
+	}
+	
+	//costrutti AddOp e MultOp
+	private void checkAddOpOrMultOp(VisitableNode<String> current) throws TypeMismatchException{
+		//Il nodo in posizione 0 è il tipo di operazione (es. plus, minus, or...)
+		VisitableNode<String> left = (VisitableNode<String>)current.getChildren().get(1);
+		VisitableNode<String> right = (VisitableNode<String>)current.getChildren().get(2);
+		
+		if(left.getType()==null)
+			left.accept(this);
+		
+		if(right.getType()==null)
+			right.accept(this);
+		
+		if(left.getType().equals(right.getType()) && (left.getType().equals("INTEGER")||left.getType().equals("BOOLEAN")))
+			current.setType("INTEGER");
+		else
+			throw new TypeMismatchException();
 	}
 	
 	
