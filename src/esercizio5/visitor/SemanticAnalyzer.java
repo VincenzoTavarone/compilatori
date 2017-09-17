@@ -65,8 +65,10 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				VisitableNode<String> child = (VisitableNode<String>) current.getChildren().get(i);
 				if(TableOnTop.containsKey(child.getValue()))
 					throw new MultiDeclarationsException("Errore dichiarazione multipla");
-				else
+				else{
+					child.setType(((VisitableNode<String>) current.getChildren().get(0)).getType());
 					TableOnTop.put(child.getValue(), child);
+				}					
 			}
 		}
 	}
