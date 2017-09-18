@@ -31,7 +31,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 					try{
 						checkRuleB(current);
 					}catch(MultiDeclarationsException e){
-						e.printStackTrace();
+						System.err.println(e.getMessage());
 					}
 				}
 				//regola C
@@ -39,7 +39,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 					try{
 						checkRuleC(current);
 					}catch(NotDeclaredIdException e){
-						e.printStackTrace();
+						System.err.println(e.getMessage());
 					}
 				}
 				//regola D
@@ -48,27 +48,61 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				}
 				//regole E
 				//WhileOp
-				if(current.getName().equals("WhileOp"))
-					checkWhileOp(current);
+				if(current.getName().equals("WhileOp")){
+					try{
+						checkWhileOp(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
+				}
 				//AssingOp
 				if(current.getName().equals("AssignOp")){
-					checkAssingOp(current);
+					try{
+						checkAssingOp(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
 				}
 				//AddOp && MulOp
-				if(current.getName().equals("AddOp")||current.getName().equals("MulOp"))
-					checkAddOpOrMultOp(current);
+				if(current.getName().equals("AddOp")||current.getName().equals("MulOp")){
+					try{
+						checkAddOpOrMultOp(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
+				}
 				//NotOp
-				if(current.getName().equals("NotOp"))
-					checkNotOp(current);
+				if(current.getName().equals("NotOp")){
+					try{
+						checkNotOp(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
+				}
 				//Relop
-				if(current.getName().equals("RelationalOp"))
-					checkRelop(current);
+				if(current.getName().equals("RelationalOp")){
+					try{
+						checkRelop(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
+				}
 				//unaryMinus
-				if(current.getName().equals("UnaryMinusOp"))
-					checkUnaryMinus(current);
+				if(current.getName().equals("UnaryMinusOp")){
+					try{
+						checkUnaryMinus(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
+				}
 				//checkIfElse
-				if(current.getName().equals("IfThenElseOp")||current.getName().equals("IfThenOp"))
-					checkIfThenElseOrIfThen(current);
+				if(current.getName().equals("IfThenElseOp")||current.getName().equals("IfThenOp")){
+					try{
+						checkIfThenElseOrIfThen(current);
+					}catch(TypeMismatchException e){
+						System.err.println(e.getMessage());
+					}
+				}
 				
 				//altre regole
 				if(current.getName().equals("VarOp")){
@@ -100,7 +134,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 			for(int i=1; i < current.getChildren().size(); i++){
 				VisitableNode<String> child = (VisitableNode<String>) current.getChildren().get(i);
 				if(TableOnTop.containsKey(child.getValue()))
-					throw new MultiDeclarationsException("Errore dichiarazione multipla");
+					throw new MultiDeclarationsException("Errore dichiarazione multipla : "+child.getValue());
 				else{
 					child.setType(((VisitableNode<String>) current.getChildren().get(0)).getName());
 					TableOnTop.put(child.getValue(), child);
@@ -125,7 +159,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 			}
 		}
 		if(!find)
-			throw new NotDeclaredIdException("Identificatore non dichiarato");
+			throw new NotDeclaredIdException("Identificatore non dichiarato : "+child.getValue());
 	}
 	
 	//regola D
@@ -174,7 +208,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(left.getType().equals(right.getType()))
 			current.setType("VOID");
 		else
-			throw new TypeMismatchException("Nodo 1 tipo :"+left.getType()+" nodo 2 :"+right.getType());
+			throw new TypeMismatchException("Errore in assingOp, nodo 1 tipo :"+left.getType()+" nodo 2 :"+right.getType());
 	}
 	
 	//costrutti AddOp e MultOp
@@ -189,7 +223,8 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(left.getType().equals(right.getType()) && (left.getType().equals("INTEGER")||left.getType().equals("BOOLEAN")))
 			current.setType("INTEGER");
 		else
-			throw new TypeMismatchException();
+			throw new TypeMismatchException("Errore in add o multop, i nodi devono essere dello stesso tipo. Nodo 1 : "+
+											left.getType() + " nodo 2 : "+right.getType());
 	}
 	
 	//costrutto notOp
@@ -203,7 +238,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(child.getType().equals("BOOLEAN")||child.getType().equals("INTEGER"))
 			current.setType("BOOLEAN");
 		else
-			throw new TypeMismatchException();
+			throw new TypeMismatchException("L'operatore Not accetta solo tipi booleani o interi");
 			
 	}
 	
@@ -219,7 +254,8 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(left.getType().equals(right.getType()) && (left.getType().equals("INTEGER")||left.getType().equals("BOOLEAN")))
 			current.setType("BOOLEAN");
 		else
-			throw new TypeMismatchException();
+			throw new TypeMismatchException("Errore in relop, i nodi devono essere dello stesso tipo. Nodo 1 : "+
+											left.getType() + " nodo 2 : "+right.getType());
 		
 	}
 	
@@ -234,7 +270,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(child.getType().equals("INTEGER") || child.getType().equals("BOOLEAN"))
 			current.setType("INTEGER");
 		else
-			throw new TypeMismatchException();
+			throw new TypeMismatchException("L'operatore unary minus accetta solo tipi booleani o interi");
 	}
 	
 	//costrutto ifThenElse o IfThen
@@ -248,7 +284,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(right.getType().equals("INTEGER")|| right.getType().equals("BOOLEAN"))
 			current.setType("VOID");
 		else
-			throw new TypeMismatchException();
+			throw new TypeMismatchException("Errore nel corpo della parola chiave THEN : "+right+" type : "+right.getType());
 	}
 	
 	//costrutto expression
