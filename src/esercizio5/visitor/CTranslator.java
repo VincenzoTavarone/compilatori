@@ -22,6 +22,7 @@ public class CTranslator implements Visitor {
 					"typedef int bool;\n"+
 					"#define TRUE 1\n"+
 					"#define FALSE 0\n";
+			code += ((VisitableNode<String>)node.getChildren().get(0)).accept(this);
 			break;
 			
 		case "BlockOp":
