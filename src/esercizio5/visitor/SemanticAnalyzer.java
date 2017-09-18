@@ -238,7 +238,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(child.getType().equals("BOOLEAN")||child.getType().equals("INTEGER"))
 			current.setType("BOOLEAN");
 		else
-			throw new TypeMismatchException("L'operatore Not accetta solo tipi booleani o interi");
+			throw new TypeMismatchException("Errore in Not. Nodo : "+child+" type : "+child.getType());
 			
 	}
 	
@@ -270,7 +270,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		if(child.getType().equals("INTEGER") || child.getType().equals("BOOLEAN"))
 			current.setType("INTEGER");
 		else
-			throw new TypeMismatchException("L'operatore unary minus accetta solo tipi booleani o interi");
+			throw new TypeMismatchException("Errore nel corpo della parola chiave UNARY MINUS :" +child+" type : "+child.getType());
 	}
 	
 	//costrutto ifThenElse o IfThen
