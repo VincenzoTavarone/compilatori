@@ -64,8 +64,10 @@ precedence right MINUS;
 program_nt ::=	PROGRAM IDENTIFIER:v INSTRUCTION_SEPARATOR block:node END_PROGRAM {:
 					VisitableNode<String> root = buildNode("ProgramOp", buildNodeWithValue("ID", v), node);
 					SyntaxTree<String> tree = new SyntaxTree<String>();
+					SemanticAnalyzer<String> semantic = new SemanticAnalyzer<String>();
 					tree.visit(root);
 					tree.write();
+					semantic.visit(root);
 					RESULT = root;
 				:}
 				;
