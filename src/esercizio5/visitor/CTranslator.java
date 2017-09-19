@@ -10,9 +10,14 @@ import java.io.Writer;
 public class CTranslator implements Visitor {
 	
 	private String code;
+	
+	public CTranslator(){
+		
+	}
 
 	@Override
 	public String visit(Visitable visitable) {
+		code = "";
 		@SuppressWarnings("unchecked")
 		VisitableNode<String> node = (VisitableNode<String>)visitable;
 		switch (node.getName()) {
@@ -22,7 +27,7 @@ public class CTranslator implements Visitor {
 					"typedef int bool;\n"+
 					"#define TRUE 1\n"+
 					"#define FALSE 0\n";
-			code += ((VisitableNode<String>)node.getChildren().get(0)).accept(this);
+			code += ((VisitableNode<String>)node.getChildren().get(1)).accept(this);
 			break;
 			
 		case "BlockOp":
@@ -46,9 +51,10 @@ public class CTranslator implements Visitor {
 				code += "bool ";
 			for(int i = 1; i < node.getChildren().size(); i++ ){
 				code += ((VisitableNode<String>)node.getChildren().get(i)).accept(this);
-				code += ", ";
+				if(i!=node.getChildren().size() - 1)
+					code += ", ";
 			}
-			code += "\n";
+			code += ";\n";
 			break;
 			
 		case "ID":
@@ -59,7 +65,7 @@ public class CTranslator implements Visitor {
 			VisitableNode<String> identifier = (VisitableNode<String>)node.getChildren().get(0);
 			code += "void "+identifier.getValue()+" {\n";
 			code += ((VisitableNode<String>)node.getChildren().get(1)).accept(this);
-			code += "\n}\n";
+			code += "}\n";
 			break;
 			
 		case "RelationalOp":
@@ -84,7 +90,8 @@ public class CTranslator implements Visitor {
 			code += ((VisitableNode<String>)node.getChildren().get(0)).accept(this);
 			code += " = ";
 			code += ((VisitableNode<String>)node.getChildren().get(1)).accept(this);
-			code += "\n";
+			code += ";\n";
+			break;
 			
 		case "ReadOp":
 			code += "scanf(\"";
@@ -96,6 +103,7 @@ public class CTranslator implements Visitor {
 				code += ", &"+((VisitableNode<String>)node.getChildren().get(i)).accept(this);
 			}
 			code += ");\n";
+			break;
 			
 		case "WriteOp":
 			code += "printf(\"";
@@ -111,7 +119,7 @@ public class CTranslator implements Visitor {
 					break;
 				}
 			}
-			code += "\"";
+			code += "\\n\"";
 			for(int i=0; i < node.getChildren().size(); i++){
 				code += ", " +((VisitableNode<String>) node.getChildren().get(i)).accept(this);
 			}
@@ -130,7 +138,7 @@ public class CTranslator implements Visitor {
 		case "IfThenElseOp":
 			code += "if("+((VisitableNode<String>)node.getChildren().get(0)).accept(this)+"){\n";
 			code += ((VisitableNode<String>)node.getChildren().get(1)).accept(this)+"}\n";
-			code += "else{"+((VisitableNode<String>)node.getChildren().get(2)).accept(this)+"}\n";
+			code += "else{\n"+((VisitableNode<String>)node.getChildren().get(2)).accept(this)+"}\n";
 			break;
 		
 		case "NotOp":
@@ -139,6 +147,11 @@ public class CTranslator implements Visitor {
 			
 		case "ConstOp":
 			code += node.getChildren().get(0).getValue();
+			break;
+			
+		case "WhileOp":
+			code += "while("+((VisitableNode<String>)node.getChildren().get(0)).accept(this)+"){\n";
+			code += ((VisitableNode<String>)node.getChildren().get(1)).accept(this)+"}\n";
 			break;
 
 		default:

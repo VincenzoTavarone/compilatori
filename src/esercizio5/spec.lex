@@ -107,17 +107,17 @@ write = "->"
 	"||"	{return symbol(sym.ADDING_OPERATOR, "||"); }
 	
 	/*relational_operator*/
-	"=="	{return symbol(sym.RELATIONAL_OPERATOR, "EQEQ"); }
-	"!="	{return symbol(sym.RELATIONAL_OPERATOR, "NE"); }
-	"<"		{return symbol(sym.RELATIONAL_OPERATOR, "LT"); }
-	"<="	{return symbol(sym.RELATIONAL_OPERATOR, "LE"); }
-	">"		{return symbol(sym.RELATIONAL_OPERATOR, "GT"); }
-	">="	{return symbol(sym.RELATIONAL_OPERATOR, "GE"); }
+	"=="	{return symbol(sym.RELATIONAL_OPERATOR, "=="); }
+	"!="	{return symbol(sym.RELATIONAL_OPERATOR, "!="); }
+	"<"		{return symbol(sym.RELATIONAL_OPERATOR, "<"); }
+	"<="	{return symbol(sym.RELATIONAL_OPERATOR, "<="); }
+	">"		{return symbol(sym.RELATIONAL_OPERATOR, ">"); }
+	">="	{return symbol(sym.RELATIONAL_OPERATOR, ">="); }
 	
 	/*multiplying_operator*/
-	"*"		{return symbol(sym.MULTIPLYING_OPERATOR, "MUL"); }
-	"/"		{return symbol(sym.MULTIPLYING_OPERATOR, "DIV"); }
-	"&&"	{return symbol(sym.MULTIPLYING_OPERATOR, "AND"); }
+	"*"		{return symbol(sym.MULTIPLYING_OPERATOR, "*"); }
+	"/"		{return symbol(sym.MULTIPLYING_OPERATOR, "/"); }
+	"&&"	{return symbol(sym.MULTIPLYING_OPERATOR, "&&"); }
 	
 	/*separatori*/
 	{instruction_separator}		{return symbol(sym.INSTRUCTION_SEPARATOR); }
