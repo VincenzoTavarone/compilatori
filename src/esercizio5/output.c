@@ -7,7 +7,7 @@ int mul1, mul2;
 int div1, div2;
 int pow1, pow2;
 int fibo;
-void fibonacci {
+void fibonacci (){
 int f1, f0, fn, i;
 f1 = 1;
 f0 = 0;
@@ -21,7 +21,7 @@ f1 = fn;
 }
 printf("%d\n", fn);
 }
-void multiplication {
+void multiplication (){
 int i, multi;
 multi = 0;
 i = 0;
@@ -31,7 +31,7 @@ i = i+1;
 }
 printf("%d\n", multi);
 }
-void power {
+void power (){
 int pow, i;
 pow = 1;
 i = 0;
@@ -53,16 +53,16 @@ pow1 = 3;
 pow2 = 4;
 fibo = 10;
 result = somma1+somma2;
-printf("%s%d\n", Il risultato della somma è:);
+printf("%s\n", "Il risultato della somma è:");
 printf("%d\n", result);
-printf("%s%d\n", Il risultato della moltiplicazione è:);
+printf("%s\n", "Il risultato della moltiplicazione è:");
 multiplication();
-printf("%s%d\n", Il risultato della potenza è:);
+printf("%s\n", "Il risultato della potenza è:");
 power();
-printf("%s%d\n", Il risultato della divisione è:);
+printf("%s\n", "Il risultato della divisione è:");
 result = div1/div2;
 printf("%d\n", result);
-printf("%s%d\n", Il risultato di fibonacci è:);
+printf("%s\n", "Il risultato di fibonacci è:");
 fibonacci();
 
 }

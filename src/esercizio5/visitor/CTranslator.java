@@ -63,7 +63,7 @@ public class CTranslator implements Visitor {
 		
 		case "ProcDeclOp":
 			VisitableNode<String> identifier = (VisitableNode<String>)node.getChildren().get(0);
-			code += "void "+identifier.getValue()+" {\n";
+			code += "void "+identifier.getValue()+" (){\n";
 			code += ((VisitableNode<String>)node.getChildren().get(1)).accept(this);
 			code += "}\n";
 			break;
@@ -114,6 +114,7 @@ public class CTranslator implements Visitor {
 					break;
 				case "STRING":
 					code += "%s";
+					break;
 				default:
 					code += "%d";
 					break;
@@ -146,7 +147,13 @@ public class CTranslator implements Visitor {
 			break;
 			
 		case "ConstOp":
-			code += node.getChildren().get(0).getValue();
+			String type_of_constant = ((VisitableNode<String>)node.getChildren().get(0)).getName();
+			if(type_of_constant.equals("STRING_CONSTANT"))
+				code += "\""+node.getChildren().get(0).getValue()+"\"";
+			else if(type_of_constant.equals("CHARACTER_CONSTANT"))
+				code += "'"+node.getChildren().get(0).getValue()+"'";
+			else
+				code += node.getChildren().get(0).getValue();
 			break;
 			
 		case "WhileOp":
