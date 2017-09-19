@@ -21,7 +21,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		@SuppressWarnings("unchecked")
 		VisitableNode<String> node = (VisitableNode<String>) visitable;
 		//regola A
-		if(node.getName().equals("ProgramOp") || node.getName().equals("ProcDeclPartOp"))
+		if(node.getName().equals("ProgramOp") || node.getName().equals("ProcDeclOp"))
 			stack.push(node);
 		for (Node<String> c : node.getChildren()) {
 			VisitableNode<String> current = (VisitableNode<String>) c;
@@ -116,7 +116,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 			}
 		}
 		//regola A
-		if(node.getName().equals("ProgramOp") || node.getName().equals("ProcDeclPartOp"))
+		if(node.getName().equals("ProgramOp") || node.getName().equals("ProcDeclOp"))
 			stack.pop();
 		return null;
 	}

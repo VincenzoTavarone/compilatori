@@ -14,7 +14,7 @@ public class Tester {
 		
 		System.out.println("esercizio 5\n");
 		
-		File file = new File("src/esercizio5/input.txt");
+		File file = new File("src/esercizio5/exercise.txt");
 		FileReader input = null;
 		try {
 			input = new FileReader(file);
