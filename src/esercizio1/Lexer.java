@@ -23,7 +23,8 @@ public class Lexer {
 	
 	public static Token[] lexer(String path){
 		
-		Token[] tokens = new Token[24];
+		int t_size = 24;
+		Token[] tokens = new Token[t_size];
 		int index = 0; //indice array tokens
 		Map<String, Object> tabella_simboli = new HashMap<String, Object>();
 		/*
@@ -300,6 +301,16 @@ public class Lexer {
 					}
 					break;
 										
+				}
+				//controllo su dimensione array
+				if(index == tokens.length - 1){
+					Token[] backup = tokens;
+					tokens = new Token[t_size*2];
+					for(int j = 0; j < t_size; j++){
+						tokens[j] = backup[j];
+					}
+					t_size*=2;
+					backup = null;
 				}
 			}//fine del ciclo			
 			buffered_reader.close();

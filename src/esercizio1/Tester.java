@@ -2,6 +2,7 @@ package esercizio1;
 
 import common.Token;
 
+
 public class Tester {
 
 	public static void main(String[] args) {
