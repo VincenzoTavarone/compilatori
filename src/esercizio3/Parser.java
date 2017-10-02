@@ -68,9 +68,7 @@ public class Parser {
 	}
 	
 	private boolean program1(){
-		
-		System.out.println("in program 1");
-				
+						
 		if(!tokens[pointer].getName().equals("SEMI"))
 			return isFinished();
 		
@@ -86,9 +84,7 @@ public class Parser {
 	}
 	
 	private boolean stat(){
-		
-		System.out.println("in stat");
-		
+				
 		int backtrack = pointer;
 		
 		if(!matched_stat()){
@@ -101,7 +97,6 @@ public class Parser {
 	
 	private boolean matched_stat(){
 		
-		System.out.println("in matched stat");
 				
 		if(tokens[pointer].getName().equals("IF")){
 			
@@ -134,7 +129,6 @@ public class Parser {
 				return false;
 				
 		}else{
-			System.out.println("in else matched stat");
 			if(!tokens[pointer].getName().equals("ID"))
 				return false;
 			
@@ -179,10 +173,7 @@ public class Parser {
 	}
 	
 	private boolean open_stat_1(){
-		
-		System.out.println("in open stat 1");
-		System.out.println(tokens[pointer]);
-		
+				
 		int backtrack = pointer;
 		
 		if(!stat()){
