@@ -40,7 +40,7 @@ scan with {:
 /*Terminali*/
 terminal String    	LPAR, RPAR, MINUS, PROGRAM, IDENTIFIER, INSTRUCTION_SEPARATOR, END_PROGRAM, VAR, PROCEDURE, 
 					INTEGER, BOOLEAN, BEGIN, WRITE, READ, IF, THEN, WHILE, DO, END, ASSIGN, RELATIONAL_OPERATOR, ADDING_OPERATOR, 
-					MULTIPLYING_OPERATOR, NOT, TRUE, FALSE, SEPARATOR, ELSE, INTEGER_CONSTANT, STRING_CONSTANT, CHARACTER_CONSTANT;
+					MULTIPLYING_OPERATOR, NOT, TRUE, FALSE, SEPARATOR, ELSE, INTEGER_CONSTANT, STRING_CONSTANT, CHARACTER_CONSTANT, VARIN;
 
 /*Non Terminali*/
 nonterminal VisitableNode<String>	program_nt, block, variable_declaration_part, statement_part, variable_declaration, procedure_declaration,
@@ -140,6 +140,11 @@ procedure_declaration_part ::=	procedure_declaration:node INSTRUCTION_SEPARATOR 
 
 procedure_declaration ::=	PROCEDURE IDENTIFIER:v INSTRUCTION_SEPARATOR simple_block:node {:
 								RESULT = buildNode("ProcDeclOp", buildNodeWithValue("ID", v), node);
+							:}
+							|
+							PROCEDURE IDENTIFIER:v LPAR VARIN IDENTIFIER:a simple_type:t RPAR INSTRUCTION_SEPARATOR simple_block:node{:
+								VisitableNode<String> argv = buildNode("ArgumentsDeclOp", buildNodeWithValue("ID", a), buildNode(t));
+								RESULT = buildNode("ProcDeclOp", buildNodeWithValue("ID", v), argv, node);
 							:}
 							;
 							

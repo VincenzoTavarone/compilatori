@@ -6,6 +6,7 @@ public class VisitableNode<T> extends Node<T> implements Visitable{
 	
 	private String name;
 	private String type;
+	private boolean unassign = false;
 
 	public VisitableNode(T value) {
 		super(value);
@@ -47,6 +48,14 @@ public class VisitableNode<T> extends Node<T> implements Visitable{
 		if(this.getValue()!=null)
 			return this.getName()+" attr=\""+this.getValue()+"\"";
 		return this.getName();
+	}
+
+	public boolean isUnassign() {
+		return unassign;
+	}
+
+	public void setUnassign(boolean unassign) {
+		this.unassign = unassign;
 	}
 	
 }

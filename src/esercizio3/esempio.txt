@@ -1,8 +1,4 @@
-if x <> y then
-	if x > y then
-		x = 10
-	else
-		y = 10
-else
-	y = 20;
-a = 200
+if a < 10 then
+	while a > b do
+		if a < 10 then
+			a = 2

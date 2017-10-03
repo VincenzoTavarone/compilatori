@@ -86,6 +86,7 @@ write = "->"
 <YYINITIAL> "true"		{ return symbol(sym.TRUE); }
 <YYINITIAL> "false"		{ return symbol(sym.FALSE); }
 <YYINITIAL> "end"		{ return symbol(sym.END); }
+<YYINITIAL> "varin"		{ return symbol(sym.VARIN); }
 
 <YYINITIAL> {
 

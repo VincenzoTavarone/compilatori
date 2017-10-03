@@ -21,13 +21,23 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		@SuppressWarnings("unchecked")
 		VisitableNode<String> node = (VisitableNode<String>) visitable;
 		//regola A
-		if(node.getName().equals("ProgramOp") || node.getName().equals("ProcDeclOp"))
+		if(node.getName().equals("ProgramOp"))
 			stack.push(node);
+		if(node.getName().equals("ProcDeclOp")){
+			stack.push(node);
+			//regola B
+			try{
+				checkRuleB(node);
+			}catch(MultiDeclarationsException e){
+				System.err.println(e.getMessage());
+			}
+		}
+		
 		for (Node<String> c : node.getChildren()) {
 			VisitableNode<String> current = (VisitableNode<String>) c;
 			if(current.isInternal()){
 				//regola B
-				if(current.getName().equals("VarDeclOp") || current.getName().equals("ProcDeclOp")){
+				if(current.getName().equals("VarDeclOp")){
 					try{
 						checkRuleB(current);
 					}catch(MultiDeclarationsException e){
@@ -111,6 +121,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				if(current.getName().equals("ExprOp")||current.getName().equals("SimpleExprOp"))
 					checkExpression(current);
 				
+				
 				//chiama il metodo ricorsivamente
 				current.accept(this);				
 			}
@@ -130,6 +141,14 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				throw new MultiDeclarationsException("Errore dichiarazione multipla");
 			else
 				TableOnTop.put(id.getValue(), id);
+			//Codice esame
+			if(current.getChildren().size()>2){
+				VisitableNode<String> argv = (VisitableNode<String>) current.getChildren().get(1);
+				VisitableNode<String> var = (VisitableNode<String>) argv.getChildren().get(0);
+				var.setType(((VisitableNode<String>) argv.getChildren().get(1)).getName());
+				var.setUnassign(true);
+				TableOnTop.put(var.getValue(), var);
+			}
 		}else{
 			for(int i=1; i < current.getChildren().size(); i++){
 				VisitableNode<String> child = (VisitableNode<String>) current.getChildren().get(i);
@@ -154,6 +173,8 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				HashMap<String, Node<String>> current_table = stack.get(i).getTable();
 				if(current_table.containsKey(child.getValue())){
 					child.setType(((VisitableNode<String>) current_table.get(child.getValue())).getType());
+					//se unassing è a true la variabile non può essere un nodo sinistro in AssignOp
+					child.setUnassign(((VisitableNode<String>)current_table.get(child.getValue())).isUnassign());
 					find = true;
 				}
 			}
@@ -204,6 +225,9 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		
 		if(right.getType()==null)
 			current.accept(this);
+		
+		if(left.isUnassign())
+			throw new TypeMismatchException("La variabile VARIN non può essere assegnata");
 		
 		if(left.getType().equals(right.getType()))
 			current.setType("VOID");
@@ -298,5 +322,6 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 		current.setType(child.getType());
 		
 	}
+	
 
 }

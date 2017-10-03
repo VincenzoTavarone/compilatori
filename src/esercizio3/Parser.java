@@ -9,10 +9,11 @@ public class Parser {
 	Grammatica:
 	    Program -> Stat Program1
 	    Program1 -> SEMI Stat Program1 | epsilon
-	    Stat -> matched_stat | open_stat
+	    Stat -> matched_stat | open_stat | while_stat
 	    matched_stat -> IF Id_num Relaz Id_num THEN matched_stat ELSE matched_stat | ID ASSING ID_num
 	    open_stat -> IF Id_num Relaz Id_num THEN open_stat1
 	    opens_stat1 -> Stat | matched_stat ELSE open_stat
+	    while_stat -> WHILE Id_num Relaz Id_num DO Stat
 	    Id_num -> ID | NUM
 	    Relaz -> LE | NE | LT | GE | GT
 	 */
@@ -90,7 +91,10 @@ public class Parser {
 		
 		if(!matched_stat()){
 			pointer = backtrack;
-			return open_stat();
+			if(!open_stat()){
+				pointer = backtrack;
+				return while_stat();
+			}
 		}
 		
 		return true;
@@ -190,6 +194,34 @@ public class Parser {
 			if(!open_stat())
 				return false;
 		}
+		
+		return true;
+	}
+	
+	private boolean while_stat(){
+		
+		if(!tokens[pointer].getName().equals("WHILE"))
+			return false;
+		
+		increment();
+		if(!id_num())
+			return false;
+		
+		increment();
+		if(!relaz())
+			return false;
+		
+		increment();
+		if(!id_num())
+			return false;
+		
+		increment();
+		if(!tokens[pointer].getName().equals("DO"))
+			return false;
+		
+		increment();
+		if(!stat())
+			return false;
 		
 		return true;
 	}

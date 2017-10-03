@@ -35,6 +35,8 @@ public class Lexer {
 		tabella_simboli.put("if", new Token("IF"));
 		tabella_simboli.put("then", new Token("THEN"));
 		tabella_simboli.put("else", new Token("ELSE"));
+		tabella_simboli.put("while", new Token("WHILE"));
+		tabella_simboli.put("do", new Token("DO"));
 		char[] buffer = new char[1024]; //buffer di destinazione
 		File file = new File(path);
 		Pattern digit = Pattern.compile("[0-9]");

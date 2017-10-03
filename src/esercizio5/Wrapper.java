@@ -35,7 +35,8 @@ public class Wrapper {
 			"ELSE",
 			"INTEGER_CONSTANT",
 			"STRING_CONSTANT",
-			"CHARACTER_CONSTANT"
+			"CHARACTER_CONSTANT",
+			"VARIN"
 	};
 	
 	public static String getClassName(int sym){

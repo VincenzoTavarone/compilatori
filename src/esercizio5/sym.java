@@ -42,5 +42,6 @@ public interface sym {
   public static final int INSTRUCTION_SEPARATOR = 7;
   public static final int VAR = 9;
   public static final int LPAR = 2;
+  public static final int VARIN = 33;
 }
 
