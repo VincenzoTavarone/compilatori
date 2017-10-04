@@ -136,6 +136,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 	private void checkRuleB(VisitableNode<String> current) throws MultiDeclarationsException{
 		HashMap<String, Node<String>> TableOnTop = stack.peek().getTable();
 		if(current.getName().equals("ProcDeclOp")){
+			TableOnTop = stack.get(0).getTable();
 			VisitableNode<String> id = (VisitableNode<String>) current.getChildren().get(0);
 			if(TableOnTop.containsKey(id.getValue()))
 				throw new MultiDeclarationsException("Errore dichiarazione multipla");
@@ -143,6 +144,7 @@ public class SemanticAnalyzer<T> extends Tree<T> implements Visitor {
 				TableOnTop.put(id.getValue(), id);
 			//Codice esame
 			if(current.getChildren().size()>2){
+				TableOnTop = stack.peek().getTable();
 				VisitableNode<String> argv = (VisitableNode<String>) current.getChildren().get(1);
 				VisitableNode<String> var = (VisitableNode<String>) argv.getChildren().get(0);
 				var.setType(((VisitableNode<String>) argv.getChildren().get(1)).getName());
